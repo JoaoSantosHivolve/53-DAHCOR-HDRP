@@ -74,8 +74,8 @@ public class RacketLayoutButton : MonoBehaviour
         // Change ui
         transform.GetChild(1).GetChild(2).GetComponent<TextMeshProUGUI>().text = (_Index+1) + "/8";
     }
-    public void SetController(RacketViewController viewController) => _ViewController = viewController;
 
+    public void SetController(RacketViewController viewController) => _ViewController = viewController;
 
     public void OpenLayout()
     {

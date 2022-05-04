@@ -21,7 +21,7 @@ public class RacketViewController : MonoBehaviour
     private void Awake()
     {
         _Racket = transform.GetChild(0);
-        _InteractionController = transform.GetChild(1).GetComponent<RacketInteractionController>();
+        _InteractionController = GameObject.Find("Canvas - Object Interaction").GetComponent<RacketInteractionController>();
     }
 
     private void Start()

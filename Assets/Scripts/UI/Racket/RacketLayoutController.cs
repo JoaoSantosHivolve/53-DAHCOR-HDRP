@@ -10,7 +10,7 @@ public class RacketLayoutController : MonoBehaviour
     private void Awake()
     {
         _Buttons = transform.GetComponentsInChildren<RacketLayoutButton>();
-        _ViewController = GameObject.Find("[RACKET CONTROLLER]").GetComponent<RacketViewController>();
+        _ViewController = GameObject.Find("[Racket Controller]").GetComponent<RacketViewController>();
     }
 
     private void Start()
