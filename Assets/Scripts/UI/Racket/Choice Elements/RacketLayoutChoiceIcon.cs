@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -40,4 +41,17 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
     {
         _Outline.SetActive(false);
     }
+
+
+    [ContextMenu("Change Font Size")]
+    void ChangeFontSize()
+    {
+        var y = transform.GetChild(0).GetComponent<RectTransform>().rect.height * 1f;
+        transform.GetChild(0).GetComponent<RectTransform>().sizeDelta = new Vector3(y, 0);
+        y = transform.GetChild(1).GetComponent<RectTransform>().rect.height * 1f;
+        transform.GetChild(1).GetComponent<RectTransform>().sizeDelta = new Vector3(y, 0);
+
+        transform.GetChild(2).GetComponent<TextMeshProUGUI>().fontSize = 12.5f;
+        transform.GetChild(3).GetComponent<TextMeshProUGUI>().fontSize = 10;
+    }                                                        
 }

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -154,4 +155,18 @@ public class RacketLayoutQuestion : MonoBehaviour
         }
     }
     public Condition GetCurrentCondition() => _QuestionCondition;
+
+
+    [ContextMenu("Change Font Size")]
+    void ChangeFontSize()
+    {
+        if(transform.GetChild(0).GetComponent<TextMeshProUGUI>() != null)
+        {
+            transform.GetChild(0).GetComponent<TextMeshProUGUI>().enableAutoSizing = false;
+            transform.GetChild(0).GetComponent<TextMeshProUGUI>().fontSize = 23;
+            transform.GetChild(0).GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
+
+            transform.GetChild(0).GetComponent<TextMeshProUGUI>().verticalAlignment = VerticalAlignmentOptions.Bottom;
+        }
+    }
 }
