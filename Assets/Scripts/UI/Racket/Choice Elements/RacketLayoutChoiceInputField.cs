@@ -8,6 +8,10 @@ public class RacketLayoutChoiceInputField : RacketLayoutChoiceElement
 {
     private TMP_InputField _InputField;
 
+    public override void UpdateData()
+    {
+    }
+
     protected override void Initialize()
     {
         _InputField = GetComponent<TMP_InputField>();

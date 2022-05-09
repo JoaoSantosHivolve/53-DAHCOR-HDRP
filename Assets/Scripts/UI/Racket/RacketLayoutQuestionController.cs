@@ -34,11 +34,15 @@ public class RacketLayoutQuestionController : MonoBehaviour
         button.SetCompleted();
     }
 
-    public void RefreshLayoutGroup()
+    public void UpdateData()
     {
-        StartCoroutine(RefreshLayoutGroupCoroutine());
+        foreach (var item in _Questions)
+        {
+            item.UpdateData();
+        }
     }
 
+    public void RefreshLayoutGroup() => StartCoroutine(RefreshLayoutGroupCoroutine());
     private IEnumerator RefreshLayoutGroupCoroutine()
     {
         var value = scrollbar.value;

@@ -53,5 +53,9 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
 
         transform.GetChild(2).GetComponent<TextMeshProUGUI>().fontSize = 12.5f;
         transform.GetChild(3).GetComponent<TextMeshProUGUI>().fontSize = 10;
-    }                                                        
+    }
+
+    public override void UpdateData()
+    {
+    }
 }

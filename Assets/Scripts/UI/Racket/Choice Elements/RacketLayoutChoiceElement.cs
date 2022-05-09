@@ -14,9 +14,9 @@ public enum Condition
 
 public abstract class RacketLayoutChoiceElement : MonoBehaviour
 {
+    [SerializeField] protected Condition _Condition = Condition.NoCondition;
+    [SerializeField] protected bool _SetAnswered = true;
     protected RacketLayoutQuestion _Question;
-    public Condition condition = Condition.NoCondition;
-    public bool setAnswered = true;
 
     private void Awake()
     {
@@ -28,6 +28,7 @@ public abstract class RacketLayoutChoiceElement : MonoBehaviour
     }
 
     protected abstract void Initialize();
+    public abstract void UpdateData();
 
     protected bool FindQuestion()
     {

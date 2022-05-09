@@ -9,7 +9,6 @@ public class RacketLayoutChoiceDropdown : RacketLayoutChoiceElement
 {
     private TMP_Dropdown _Dropdown;
 
-
     protected override void Initialize()
     {
         _Dropdown = GetComponent<TMP_Dropdown>();
@@ -44,5 +43,9 @@ public class RacketLayoutChoiceDropdown : RacketLayoutChoiceElement
 
         transform.GetChild(1).GetComponent<TextMeshProUGUI>().enableAutoSizing = false;
         transform.GetChild(1).GetComponent<TextMeshProUGUI>().fontSize = 15;
+    }
+
+    public override void UpdateData()
+    {
     }
 }

@@ -6,11 +6,13 @@ public class RacketLayoutController : MonoBehaviour
 {
     private RacketLayoutButton[] _Buttons;
     private RacketViewController _ViewController;
+    private RacketLayoutQuestionController[] _QuestionsController;
 
     private void Awake()
     {
         _Buttons = transform.GetComponentsInChildren<RacketLayoutButton>();
         _ViewController = GameObject.Find("[Racket Controller]").GetComponent<RacketViewController>();
+        _QuestionsController = GameObject.FindObjectsOfType<RacketLayoutQuestionController>();
     }
 
     private void Start()
@@ -44,6 +46,14 @@ public class RacketLayoutController : MonoBehaviour
                 _Buttons[i].OpenLayout();
             else 
                 _Buttons[i].CloseLayout();
+        }
+    }
+
+    public void UpdateQuestionsWithNewData()
+    {
+        foreach (var item in _QuestionsController)
+        {
+            item.UpdateData();
         }
     }
 }
