@@ -14,7 +14,8 @@ public class RacketLayoutQuestionController : MonoBehaviour
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            _Questions.Add(transform.GetChild(i).GetComponent<RacketLayoutQuestion>());
+            if(transform.GetChild(i).GetComponent<RacketLayoutQuestion>() != null)
+                _Questions.Add(transform.GetChild(i).GetComponent<RacketLayoutQuestion>());
         }
         _LayoutGroup = GetComponent<VerticalLayoutGroup>();
     }
@@ -24,7 +25,7 @@ public class RacketLayoutQuestionController : MonoBehaviour
         foreach (var item in _Questions)
         {
             if (item.gameObject.activeSelf)
-                if (!item.answered)
+                if (!item.IsAnswered)
                 {
                     button.SetUncomplete();
                     return;

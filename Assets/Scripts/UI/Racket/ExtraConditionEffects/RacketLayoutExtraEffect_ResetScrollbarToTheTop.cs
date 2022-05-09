@@ -6,7 +6,7 @@ using UnityEngine.UI;
 // BUG FIX FOR THE CHANGE BETWEN "DAHCOR" "YOU" CHOICES
 public class RacketLayoutExtraEffect_ResetScrollbarToTheTop : RacketLayoutExtraEffect
 {
-    public RacketLayoutQuestion targetQuestion;
+    public RacketLayoutQuestionButtons targetQuestion;
     public Scrollbar scrollbar;
 
     public override void OnClickEffect()

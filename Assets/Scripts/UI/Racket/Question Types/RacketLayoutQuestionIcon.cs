@@ -12,7 +12,7 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
 
     public override void OnReset()
     {
-        foreach (RacketLayoutChoiceIcon item in _Choices)
+        foreach (RacketLayoutChoiceIcon item in _ChoiceElements)
         {
             item.SetUnselected();
         }
@@ -24,7 +24,7 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
 
     public void ClearOtherSelectedIcons(RacketLayoutChoiceIcon icon)
     {
-        foreach (RacketLayoutChoiceIcon item in _Choices)
+        foreach (RacketLayoutChoiceIcon item in _ChoiceElements)
         {
             if (item != icon)
                 item.SetUnselected();

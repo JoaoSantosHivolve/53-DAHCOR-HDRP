@@ -3,48 +3,24 @@ using UnityEngine;
 
 public abstract class RacketLayoutQuestion : MonoBehaviour
 {
-    [SerializeField] private bool _Answered;
-    [SerializeField] private Condition _SelectedCondition = Condition.NoConditionSetYet;
-    [SerializeField] private List<GameObject> _Choice1;
-    [SerializeField] private List<GameObject> _Choice2;
-    [SerializeField] private List<GameObject> _Choice3;
-    [SerializeField] private List<GameObject> _Choice4;
-    [SerializeField] private List<GameObject> _AlwaysClearOnClick;
-    protected List<RacketLayoutChoiceElement> _Choices;
+    [SerializeField] protected bool _Answered;
+    protected List<RacketLayoutChoiceElement> _ChoiceElements;
 
     private RacketLayoutQuestionController _Controller;
     protected RacketLayoutExtraEffect[] _ExtraEffects;
 
     private void Awake()
     {
-        _Choices = new List<RacketLayoutChoiceElement>();
+        _ChoiceElements = new List<RacketLayoutChoiceElement>();
         _Controller = transform.parent.GetComponent<RacketLayoutQuestionController>();
         _ExtraEffects = transform.GetComponents<RacketLayoutExtraEffect>();
-    }
-    private void Start()
-    {
-        ClearChoices();
-    }
-    private void OnEnable()
-    {
-        if (!_Answered)
-            ClearChoices();
-        if (_Answered)
-            SetChoice();
     }
 
     public abstract void UpdateData();
     public abstract void OnReset();
 
-    public void OnChoiceClick(Condition condition)
+    public void OnAnsweringQuestion()
     {
-        _SelectedCondition = condition;
-
-        ClearChoices();
-
-        if(_SelectedCondition != Condition.NoCondition)
-            SetChoice();
-
         // If extra effect scripts are added to gameobject, they activate now
         if(_ExtraEffects.Length > 0)
         {
@@ -59,44 +35,6 @@ public abstract class RacketLayoutQuestion : MonoBehaviour
         _Controller.CheckIfAllQuestionsAreAnswered();
     }
 
-    private void ClearChoices()
-    {
-        foreach (var item in _Choice1)
-            item.SetActive(false);
-        foreach (var item in _Choice2)
-            item.SetActive(false);
-        foreach (var item in _Choice3) 
-            item.SetActive(false);
-        foreach (var item in _Choice4) 
-            item.SetActive(false);
-        foreach (var item in _AlwaysClearOnClick)
-            item.SetActive(false);
-    }
-    private void SetChoice()
-    {
-        switch (_SelectedCondition)
-        {
-            case Condition.ConditionOne:
-                foreach (var item in _Choice1)
-                    item.SetActive(true);
-                break;
-            case Condition.ConditionTwo:
-                foreach (var item in _Choice2)
-                    item.SetActive(true);
-                break;
-            case Condition.ConditionThree:
-                foreach (var item in _Choice3)
-                    item.SetActive(true);
-                break;
-            case Condition.ConditionFour:
-                foreach (var item in _Choice4)
-                    item.SetActive(true);
-                break;
-            default:
-                break;
-        }
-    }
-
     public void ResetQuestion()
     {
         _Answered = false;
@@ -104,8 +42,8 @@ public abstract class RacketLayoutQuestion : MonoBehaviour
         OnReset();
     }
     public void SetAnswered() => _Answered = true;
-    public void AddChoiceElement(RacketLayoutChoiceElement choiceElement) => _Choices.Add(choiceElement);
-    public Condition GetCurrentCondition() => _SelectedCondition;
+    public void AddChoiceElement(RacketLayoutChoiceElement choiceElement) => _ChoiceElements.Add(choiceElement);
+    public bool IsAnswered => _Answered;
 
     //[ContextMenu("Change Font Size")]
     //void ChangeFontSize()

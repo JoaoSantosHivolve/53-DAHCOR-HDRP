@@ -26,8 +26,8 @@ public class RacketLayoutChoiceDropdown : RacketLayoutChoiceElement
     private void OnValueChanged(int arg0)
     {
         // Set question answered
-        if (setAnswered)
-            _Question.answered = true;
+        if (_SetAnswered)
+            _Question.SetAnswered();
     }
 
     [ContextMenu("Change Font Size")]

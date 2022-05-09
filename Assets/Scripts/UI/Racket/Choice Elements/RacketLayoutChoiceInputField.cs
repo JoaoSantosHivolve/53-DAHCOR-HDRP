@@ -22,11 +22,11 @@ public class RacketLayoutChoiceInputField : RacketLayoutChoiceElement
     {
         if(arg0 != "")
         {
-            if (setAnswered)
-                _Question.answered = true;
+            if (_SetAnswered)
+                _Question.SetAnswered();
         }
 
         // Send condition if any
-        _Question.OnChoiceClick(condition);
+        _Question.OnAnsweringQuestion();
     }
 }

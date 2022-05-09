@@ -3,6 +3,7 @@ using UnityEngine.UI;
 
 public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
 {
+    [SerializeField] protected Condition _Condition = Condition.NoCondition;
     private RacketLayoutQuestionButtons _ButtonTypeQuestion;
     private Color _SelectedColor = Color.black;
     private Color _UnselectedColor = new Color(213f/255f, 213f/255f, 213f/255f);
@@ -11,11 +12,12 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
         
     protected override void Initialize()
     {
-        _ButtonTypeQuestion = (RacketLayoutQuestionButtons)_Question;
+        _ButtonTypeQuestion = _Question as RacketLayoutQuestionButtons;
         _Button = GetComponent<Button>();
         _Button.onClick.AddListener(OnClick);
         _Image = GetComponent<Image>();
-        _Question.AddChoiceElement(this);
+
+        _Question.AddChoiceElement(gameObject.GetComponent<RacketLayoutChoiceElement>());
     }
 
     private void OnClick()
@@ -31,7 +33,7 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
         _ButtonTypeQuestion.ClearOtherSelectedButtons(this);
 
         // Send condition if any
-        _ButtonTypeQuestion.OnChoiceClick(_Condition);
+        _ButtonTypeQuestion.OnSelectingChoice(_Condition);
     }
 
     public void SetUnselected()

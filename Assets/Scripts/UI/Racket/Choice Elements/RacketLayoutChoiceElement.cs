@@ -14,11 +14,10 @@ public enum Condition
 
 public abstract class RacketLayoutChoiceElement : MonoBehaviour
 {
-    [SerializeField] protected Condition _Condition = Condition.NoCondition;
     [SerializeField] protected bool _SetAnswered = true;
     protected RacketLayoutQuestion _Question;
 
-    private void Awake()
+    private void Start()
     {
         if (FindQuestion())
         {
@@ -32,7 +31,12 @@ public abstract class RacketLayoutChoiceElement : MonoBehaviour
 
     protected bool FindQuestion()
     {
-        if (transform.parent.GetComponent<RacketLayoutQuestion>() != null)
+        if (transform.GetComponent<RacketLayoutQuestion>() != null)
+        {
+            _Question = transform.parent.GetComponent<RacketLayoutQuestion>();
+            return true;
+        }
+        else if (transform.parent.GetComponent<RacketLayoutQuestion>() != null)
         {
             _Question = transform.parent.GetComponent<RacketLayoutQuestion>();
             return true;
