@@ -33,19 +33,13 @@ public class RacketLayoutChoiceDropdown : RacketLayoutChoiceElement
     [ContextMenu("Change Font Size")]
     void ChangeFontSize()
     {
-
         var rect = GetComponent<RectTransform>().rect;
         rect.height = 35;
         GetComponent<RectTransform>().sizeDelta = new Vector2(rect.width, rect.height);
 
         transform.GetChild(0).GetComponent<Image>().pixelsPerUnitMultiplier = 30;
 
-
         transform.GetChild(1).GetComponent<TextMeshProUGUI>().enableAutoSizing = false;
         transform.GetChild(1).GetComponent<TextMeshProUGUI>().fontSize = 15;
-    }
-
-    public override void UpdateData()
-    {
     }
 }

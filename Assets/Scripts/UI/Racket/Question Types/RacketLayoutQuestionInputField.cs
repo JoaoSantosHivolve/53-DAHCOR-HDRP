@@ -4,6 +4,10 @@ using UnityEngine;
 
 public class RacketLayoutQuestionInputField : RacketLayoutQuestion
 {
+    public override void Initialize()
+    {
+    }
+
     public override void OnReset()
     {
     }

@@ -10,9 +10,12 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
     [SerializeField] private List<GameObject> _Choice3;
     [SerializeField] private List<GameObject> _Choice4;
     [SerializeField] private List<GameObject> _AlwaysClearOnClick;
+    private List<RacketLayoutChoiceButton> _ChoiceButtons;
 
-    private void Start()
+    public override void Start()
     {
+        base.Start();
+
         ClearChoices();
     }
     private void OnEnable()
@@ -23,13 +26,17 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
             SetChoice();
     }
 
+    public override void Initialize()
+    {
+        _ChoiceButtons = new List<RacketLayoutChoiceButton>();
+    }
     public override void UpdateData()
     {
 
     }
     public override void OnReset()
     {
-        foreach (RacketLayoutChoiceButton item in _ChoiceElements)
+        foreach (RacketLayoutChoiceButton item in _ChoiceButtons)
         {
             item.SetUnselected();
         }
@@ -37,7 +44,7 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
     
     public void ClearOtherSelectedButtons(RacketLayoutChoiceButton button)
     {
-        foreach (RacketLayoutChoiceButton item in _ChoiceElements)
+        foreach (RacketLayoutChoiceButton item in _ChoiceButtons)
         {
             if (item != button)
             {
@@ -54,11 +61,10 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
         if (_SelectedCondition != Condition.NoCondition)
             SetChoice();
 
-
         OnAnsweringQuestion();
     }
-
     public Condition GetCurrentCondition() => _SelectedCondition;
+    public void AddChoiceElement(RacketLayoutChoiceButton choiceButton) => _ChoiceButtons.Add(choiceButton);
 
     private void ClearChoices()
     {

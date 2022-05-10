@@ -16,8 +16,11 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
         _Button = GetComponent<Button>();
         _Button.onClick.AddListener(OnClick);
         _Image = GetComponent<Image>();
+    }
 
-        _Question.AddChoiceElement(gameObject.GetComponent<RacketLayoutChoiceElement>());
+    private void Start()
+    {
+        _ButtonTypeQuestion.AddChoiceElement(this);
     }
 
     private void OnClick()
@@ -39,10 +42,6 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
     public void SetUnselected()
     {
         _Image.color = _UnselectedColor;
-    }
-
-    public override void UpdateData()
-    {
     }
 
     //[ContextMenu("Change Font Size")]

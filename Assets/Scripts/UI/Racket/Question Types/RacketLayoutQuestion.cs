@@ -4,29 +4,35 @@ using UnityEngine;
 public abstract class RacketLayoutQuestion : MonoBehaviour
 {
     [SerializeField] protected bool _Answered;
-    protected List<RacketLayoutChoiceElement> _ChoiceElements;
-
     private RacketLayoutQuestionController _Controller;
-    protected RacketLayoutExtraEffect[] _ExtraEffects;
+    private RacketLayoutExtraEffect[] _ExtraEffects;
 
-    private void Awake()
+    public void BaseInitialize()
     {
-        _ChoiceElements = new List<RacketLayoutChoiceElement>();
         _Controller = transform.parent.GetComponent<RacketLayoutQuestionController>();
         _ExtraEffects = transform.GetComponents<RacketLayoutExtraEffect>();
+
+        Initialize();
+    }
+    public virtual void Start()
+    {
     }
 
+    public abstract void Initialize();
     public abstract void UpdateData();
     public abstract void OnReset();
 
     public void OnAnsweringQuestion()
     {
         // If extra effect scripts are added to gameobject, they activate now
-        if(_ExtraEffects.Length > 0)
+        if (_ExtraEffects != null)
         {
-            foreach (var item in _ExtraEffects)
+            if (_ExtraEffects.Length > 0)
             {
-                item.OnClickEffect();
+                foreach (var item in _ExtraEffects)
+                {
+                    item.OnClickEffect();
+                }
             }
         }
 
@@ -42,7 +48,6 @@ public abstract class RacketLayoutQuestion : MonoBehaviour
         OnReset();
     }
     public void SetAnswered() => _Answered = true;
-    public void AddChoiceElement(RacketLayoutChoiceElement choiceElement) => _ChoiceElements.Add(choiceElement);
     public bool IsAnswered => _Answered;
 
     //[ContextMenu("Change Font Size")]

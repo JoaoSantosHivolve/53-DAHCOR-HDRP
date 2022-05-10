@@ -15,7 +15,12 @@ public class RacketLayoutQuestionController : MonoBehaviour
         for (int i = 0; i < transform.childCount; i++)
         {
             if(transform.GetChild(i).GetComponent<RacketLayoutQuestion>() != null)
-                _Questions.Add(transform.GetChild(i).GetComponent<RacketLayoutQuestion>());
+            {
+                var question = transform.GetChild(i).GetComponent<RacketLayoutQuestion>();
+                question.BaseInitialize();
+
+                _Questions.Add(question);
+            }
         }
         _LayoutGroup = GetComponent<VerticalLayoutGroup>();
     }
