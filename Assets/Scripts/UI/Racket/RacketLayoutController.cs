@@ -7,17 +7,18 @@ public class RacketLayoutController : MonoBehaviour
     private RacketLayoutButton[] _Buttons;
     private RacketViewController _ViewController;
     private RacketLayoutQuestionController[] _QuestionsController;
+    private Animator _Ui;
 
     private void Awake()
     {
         _Buttons = transform.GetComponentsInChildren<RacketLayoutButton>();
+        _Ui = GameObject.Find("Canvas - UI").GetComponent<Animator>();
         _ViewController = GameObject.Find("[Racket Controller]").GetComponent<RacketViewController>();
         _QuestionsController = GameObject.FindObjectsOfType<RacketLayoutQuestionController>();
     }
 
     private void Start()
     {
-
         // Set Button index
         for (int i = 0; i < _Buttons.Length; i++)
         {
@@ -49,11 +50,37 @@ public class RacketLayoutController : MonoBehaviour
         }
     }
 
-    public void UpdateQuestionsWithNewData()
+    public void SetupApp() => StartCoroutine(SetupComponents());
+    private IEnumerator SetupComponents()
+    {
+        yield return new WaitForSeconds(1f);
+
+        InitializeAllQuestions();
+
+        yield return new WaitForSeconds(1f);
+
+        UpdateQuestionsData();
+
+        _Ui.SetTrigger("StartFadeIn");
+    }
+
+    public void UpdateQuestionsData()
     {
         foreach (var item in _QuestionsController)
         {
             item.UpdateData();
         }
+
+        Debug.Log("<color=yellow> Questions Updated</color>");
+    }
+
+    private void InitializeAllQuestions()
+    {
+        foreach (var item in _QuestionsController)
+        {
+            item.InitializeQuestions();
+        }
+
+        Debug.Log("<color=yellow> Questions Initialized</color>");
     }
 }

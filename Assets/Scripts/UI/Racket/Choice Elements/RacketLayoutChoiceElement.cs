@@ -18,18 +18,24 @@ public abstract class RacketLayoutChoiceElement : MonoBehaviour
     protected bool _Initialized = false;
     protected RacketLayoutQuestion _Question;
 
-    private void Awake()
+    //private void Awake()
+    //{
+    //    if (FindQuestion() && !_Initialized)
+    //    {
+    //        Initialize();
+    //
+    //        _Initialized = true;
+    //    }
+    //    else if (!FindQuestion())
+    //        Debug.Log("Question not found at " + this.name);
+    //}
+
+    public void InitializeChoiceElement(RacketLayoutQuestion question)
     {
-        if (FindQuestion() && !_Initialized)
-        {
-            Initialize();
+        _Question = question;
 
-            _Initialized = true;
-        }
-        else if (!FindQuestion())
-            Debug.Log("Question not found at " + this.name);
+        Initialize();
     }
-
     protected abstract void Initialize();
 
     protected bool FindQuestion()
@@ -50,12 +56,5 @@ public abstract class RacketLayoutChoiceElement : MonoBehaviour
             return true;
         }
         return false;
-    }
-
-    public void ForceInitialize()
-    {
-        Initialize();
-        
-        _Initialized = true;
     }
 }

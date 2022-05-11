@@ -4,7 +4,6 @@ using UnityEngine.UI;
 public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
 {
     [SerializeField] protected Condition _Condition = Condition.NoCondition;
-    private RacketLayoutQuestionButtons _ButtonTypeQuestion;
     private Color _SelectedColor = Color.black;
     private Color _UnselectedColor = new Color(213f/255f, 213f/255f, 213f/255f);
     private Button _Button;
@@ -12,15 +11,9 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
         
     protected override void Initialize()
     {
-        _ButtonTypeQuestion = _Question as RacketLayoutQuestionButtons;
         _Button = GetComponent<Button>();
         _Button.onClick.AddListener(OnClick);
         _Image = GetComponent<Image>();
-    }
-
-    private void Start()
-    {
-        _ButtonTypeQuestion.AddChoiceElement(this);
     }
 
     private void OnClick()
@@ -33,10 +26,10 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
         _Image.color = _SelectedColor;
 
         // Set other buttons Unselected
-        _ButtonTypeQuestion.ClearOtherSelectedButtons(this);
+        (_Question as RacketLayoutQuestionButtons).ClearOtherSelectedButtons(this);
 
         // Send condition if any
-        _ButtonTypeQuestion.OnSelectingChoice(_Condition);
+        (_Question as RacketLayoutQuestionButtons).OnSelectingChoice(_Condition);
     }
 
     public void SetUnselected()

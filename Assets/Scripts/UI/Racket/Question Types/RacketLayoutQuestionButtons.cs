@@ -10,16 +10,18 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
     [SerializeField] private List<GameObject> _Choice3;
     [SerializeField] private List<GameObject> _Choice4;
     [SerializeField] private List<GameObject> _AlwaysClearOnClick;
-    private List<RacketLayoutChoiceButton> _ChoiceButtons;
+    [SerializeField] private RacketLayoutChoiceButton[] _ChoiceButtons;
 
-    public override void Start()
+    private void Awake()
     {
-        base.Start();
-
-        ClearChoices();
+        _ChoiceButtons = transform.Find("Options").GetComponentsInChildren<RacketLayoutChoiceButton>();
     }
+
     private void OnEnable()
     {
+        if (!_Initialized)
+            return;
+
         if (!_Answered)
             ClearChoices();
         if (_Answered)
@@ -28,7 +30,14 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
 
     public override void Initialize()
     {
-        _ChoiceButtons = new List<RacketLayoutChoiceButton>();
+        foreach (var item in _ChoiceButtons)
+        {
+            item.InitializeChoiceElement(this);
+        }
+
+        OnEnable();
+
+        ClearChoices();
     }
     public override void UpdateData()
     {
@@ -64,7 +73,6 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
         OnAnsweringQuestion();
     }
     public Condition GetCurrentCondition() => _SelectedCondition;
-    public void AddChoiceElement(RacketLayoutChoiceButton choiceButton) => _ChoiceButtons.Add(choiceButton);
 
     private void ClearChoices()
     {

@@ -1,21 +1,21 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public abstract class RacketLayoutQuestion : MonoBehaviour
 {
     [SerializeField] protected bool _Answered;
     private RacketLayoutQuestionController _Controller;
     private RacketLayoutExtraEffect[] _ExtraEffects;
+    protected bool _Initialized = false;
 
     public void BaseInitialize()
     {
+        _Initialized = true;
         _Controller = transform.parent.GetComponent<RacketLayoutQuestionController>();
         _ExtraEffects = transform.GetComponents<RacketLayoutExtraEffect>();
 
         Initialize();
-    }
-    public virtual void Start()
-    {
     }
 
     public abstract void Initialize();
@@ -36,7 +36,7 @@ public abstract class RacketLayoutQuestion : MonoBehaviour
             }
         }
 
-        _Controller.RefreshLayoutGroup();
+        RefreshUi();
 
         _Controller.CheckIfAllQuestionsAreAnswered();
     }
@@ -50,6 +50,20 @@ public abstract class RacketLayoutQuestion : MonoBehaviour
     public void SetAnswered() => _Answered = true;
     public bool IsAnswered => _Answered;
 
+    protected void RefreshUi()
+    {
+        // Actualy works pretty well
+        Canvas.ForceUpdateCanvases();
+        GetComponent<VerticalLayoutGroup>().spacing += 0.001f;
+        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform);
+        Canvas.ForceUpdateCanvases();
+
+        Canvas.ForceUpdateCanvases();
+        GetComponent<VerticalLayoutGroup>().spacing += 0.001f;
+        Canvas.ForceUpdateCanvases();
+
+
+    }
     //[ContextMenu("Change Font Size")]
     //void ChangeFontSize()
     //{

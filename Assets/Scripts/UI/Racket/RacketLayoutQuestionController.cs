@@ -17,7 +17,6 @@ public class RacketLayoutQuestionController : MonoBehaviour
             if(transform.GetChild(i).GetComponent<RacketLayoutQuestion>() != null)
             {
                 var question = transform.GetChild(i).GetComponent<RacketLayoutQuestion>();
-                question.BaseInitialize();
 
                 _Questions.Add(question);
             }
@@ -38,6 +37,14 @@ public class RacketLayoutQuestionController : MonoBehaviour
         }
 
         button.SetCompleted();
+    }
+
+    public void InitializeQuestions()
+    {
+        foreach (var item in _Questions)
+        {
+            item.BaseInitialize();
+        }
     }
 
     public void UpdateData()

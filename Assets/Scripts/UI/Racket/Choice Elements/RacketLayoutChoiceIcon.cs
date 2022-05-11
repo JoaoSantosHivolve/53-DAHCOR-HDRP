@@ -6,27 +6,23 @@ using UnityEngine.UI;
 
 public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
 {
-    private RacketLayoutQuestionIcon _IconTypeQuestion;
     private Button _Button;
-
     private Image _Image;
+    private Mask _ImageMask;
     private GameObject _Outline;
     private TextMeshProUGUI _Name;
     private TextMeshProUGUI _Price;
 
     protected override void Initialize()
     {
-        _IconTypeQuestion = (RacketLayoutQuestionIcon)_Question;
-
         _Button = GetComponent<Button>();
         _Button.onClick.AddListener(OnClick);
 
-        _Image = transform.GetChild(0).GetComponent<Image>();
+        _ImageMask = transform.GetChild(0).GetComponent<Mask>();
+        _Image = transform.GetChild(0).GetChild(0).GetComponent<Image>();
         _Outline = transform.GetChild(1).gameObject;
         _Name = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         _Price = transform.GetChild(3).GetComponent<TextMeshProUGUI>();
-
-        SetUnselected();
     }
 
     private void OnClick()
@@ -45,16 +41,30 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         (_Question as RacketLayoutQuestionIcon).OnAnsweringQuestion();
     }
 
+    public IEnumerator UpdateComponents()
+    {
+        var height = _ImageMask.GetComponent<RectTransform>().rect.height;
+        _ImageMask.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
+        _Outline.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
+
+        yield return new WaitForEndOfFrame(); // The second one is to prevent the 0 width bug
+
+        height = _ImageMask.GetComponent<RectTransform>().rect.height;
+        _ImageMask.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
+        _Outline.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
+
+    }
     public void SetUnselected()
     {
         _Outline.SetActive(false);
     }
-
     public void SetData(Sprite image, string name, string price)
     {
         _Image.sprite = image;
         _Name.text = name;
-        _Price.text = price;
+        _Price.text = "+" + price;
+
+        SetUnselected();
     }
     public void SetData(Sprite image, string name, string color, string price)
     {
@@ -63,7 +73,7 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         var r = color[0] + color[1] + color[2];
         var g = color[3] + color[4] + color[5];
         var b = color[6] + color[7] + color[8];
-        var newColor = new Color(r, g, b);
+        var newColor = new Color((int)r / 255f, (int)g / 255f, (int)b / 255f);
 
         _Image.color = newColor;
     }
