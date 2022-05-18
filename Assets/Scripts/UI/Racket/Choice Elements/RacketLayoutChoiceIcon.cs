@@ -1,8 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
+public enum ChoiceIconType
+{
+    NotSet,
+    Color,
+    Texture
+}
 
 public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
 {
@@ -12,6 +20,11 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
     private GameObject _Outline;
     private TextMeshProUGUI _Name;
     private TextMeshProUGUI _Price;
+    private ChoiceIconType _Type = ChoiceIconType.NotSet;
+    private PartToModify _PartToModify = PartToModify.None;
+    // Data
+    private Color _DataColor;
+    private Texture2D _DataTexture;
 
     protected override void Initialize()
     {
@@ -30,6 +43,19 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         // Set question answered
         if (_SetAnswered)
             _Question.SetAnswered();
+
+        // Change racket model
+        switch (_Type)
+        {
+            case ChoiceIconType.Color:
+                RacketMaterialController.Instance.ChangePart(_PartToModify, _DataColor);
+                break;
+            case ChoiceIconType.Texture:
+                RacketMaterialController.Instance.ChangePart(_PartToModify, _DataTexture);
+                break;
+            default:
+                break;
+        }
 
         // Set outline
         _Outline.SetActive(true);
@@ -58,24 +84,39 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
     {
         _Outline.SetActive(false);
     }
-    public void SetData(Sprite image, string name, string price)
+    public void SetData(PartToModify partToModify, Sprite image, string name, string price)
+    {
+        SetComponents(image, name, price);
+
+        SetUnselected();
+
+        _PartToModify = partToModify;
+        _Type = ChoiceIconType.Texture;
+        _DataTexture = image.texture;
+    }
+
+    public void SetData(PartToModify partToModify, Sprite image, string name, string color, string price)
+    {
+        SetComponents(image, name, price);
+
+        var r = int.Parse(color.Substring(0, 3));
+        var g = int.Parse(color.Substring(3, 3));
+        var b = int.Parse(color.Substring(6, 3));
+        var newColor = new Color(r / 255f, g / 255f, b / 255f);
+        _Image.color = newColor;
+
+        SetUnselected();
+
+        _PartToModify = partToModify;
+        _Type = ChoiceIconType.Color;
+        _DataColor = newColor;
+    }
+
+    private void SetComponents(Sprite image, string name, string price)
     {
         _Image.sprite = image;
         _Name.text = name;
         _Price.text = "+" + price;
-
-        SetUnselected();
-    }
-    public void SetData(Sprite image, string name, string color, string price)
-    {
-        SetData(image, name, price);
-
-        var r = color[0] + color[1] + color[2];
-        var g = color[3] + color[4] + color[5];
-        var b = color[6] + color[7] + color[8];
-        var newColor = new Color((int)r / 255f, (int)g / 255f, (int)b / 255f);
-
-        _Image.color = newColor;
     }
 
     [ContextMenu("Change Font Size")]

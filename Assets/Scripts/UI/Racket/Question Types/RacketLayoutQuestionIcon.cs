@@ -15,6 +15,8 @@ public enum DataTypeToLoad
 public class RacketLayoutQuestionIcon : RacketLayoutQuestion
 {
     [SerializeField] private DataTypeToLoad _DataTypeToLoad = DataTypeToLoad.NotSetYet;
+    [SerializeField] private PartToModify _PartToModify = PartToModify.None;
+
     private GridLayoutGroup _GridLayoutGroup;
     [SerializeField] private List<RacketLayoutChoiceIcon> _Cells;
 
@@ -77,7 +79,7 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
                     var currentData = colorData[i];
                     var cell = Instantiate(prefab.gameObject, _GridLayoutGroup.transform).GetComponent<RacketLayoutChoiceIcon>();
                     cell.InitializeChoiceElement(this);
-                    cell.SetData(circleSprite, currentData.name, currentData.color, currentData.price);
+                    cell.SetData(_PartToModify, circleSprite, currentData.name, currentData.color, currentData.price);
 
                     _Cells.Add(cell);
                 }
@@ -102,7 +104,7 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
 
                     var cell = Instantiate(prefab.gameObject, _GridLayoutGroup.transform).GetComponent<RacketLayoutChoiceIcon>();
                     cell.InitializeChoiceElement(this);
-                    cell.SetData(skinTextureSprite, currentData.name, currentData.price);
+                    cell.SetData(_PartToModify, skinTextureSprite, currentData.name, currentData.price);
 
                     _Cells.Add(cell);
                 }
