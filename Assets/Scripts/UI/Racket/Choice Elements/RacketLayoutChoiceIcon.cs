@@ -18,6 +18,7 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
     private Image _Image;
     private Mask _ImageMask;
     private GameObject _Outline;
+    private GameObject _SecondOutline;
     private TextMeshProUGUI _Name;
     private TextMeshProUGUI _Price;
     private ChoiceIconType _Type = ChoiceIconType.NotSet;
@@ -36,8 +37,8 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         _Outline = transform.GetChild(1).gameObject;
         _Name = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         _Price = transform.GetChild(3).GetComponent<TextMeshProUGUI>();
+        _SecondOutline = transform.GetChild(4).gameObject;
     }
-
     private void OnClick()
     {
         // Set question answered
@@ -72,13 +73,14 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         var height = _ImageMask.GetComponent<RectTransform>().rect.height;
         _ImageMask.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
         _Outline.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
+        _SecondOutline.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
 
         yield return new WaitForEndOfFrame(); // The second one is to prevent the 0 width bug
 
         height = _ImageMask.GetComponent<RectTransform>().rect.height;
         _ImageMask.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
         _Outline.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
-
+        _SecondOutline.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
     }
     public void SetUnselected()
     {

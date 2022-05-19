@@ -37,9 +37,9 @@ public class DataLoader : Singleton<DataLoader>
     {
         base.Awake();
 
-        _ServerName = _UseLocalhost ? "localhost" : "35.180.186.19";
-        _UserName = _UseLocalhost ? "root" : "ubuntu";
-        _Password = _UseLocalhost ? "" : "admin";
+        _ServerName = _UseLocalhost ? "localhost" : "13.38.61.207";
+        _UserName = _UseLocalhost ? "root" : "dahcor";
+        _Password = _UseLocalhost ? "" : "dahcor";
         _ScriptsPath = "//" + _ServerName + "/dahcor_backend/";
 
         _ColorData = new List<ColorData>();
