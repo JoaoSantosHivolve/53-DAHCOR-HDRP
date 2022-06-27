@@ -61,8 +61,6 @@ public abstract class RacketLayoutQuestion : MonoBehaviour
         Canvas.ForceUpdateCanvases();
         GetComponent<VerticalLayoutGroup>().spacing += 0.001f;
         Canvas.ForceUpdateCanvases();
-
-
     }
     //[ContextMenu("Change Font Size")]
     //void ChangeFontSize()
