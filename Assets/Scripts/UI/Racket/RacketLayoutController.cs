@@ -64,16 +64,6 @@ public class RacketLayoutController : MonoBehaviour
         _Ui.SetTrigger("StartFadeIn");
     }
 
-    public void UpdateQuestionsData()
-    {
-        foreach (var item in _QuestionsController)
-        {
-            item.UpdateData();
-        }
-
-        Debug.Log("<color=yellow> Questions Updated</color>");
-    }
-
     private void InitializeAllQuestions()
     {
         foreach (var item in _QuestionsController)
@@ -82,5 +72,15 @@ public class RacketLayoutController : MonoBehaviour
         }
 
         Debug.Log("<color=yellow> Questions Initialized</color>");
+    }
+
+    public void UpdateQuestionsData()
+    {
+        foreach (var questionsController in _QuestionsController)
+        {
+            questionsController.UpdateData();
+        }
+
+        Debug.Log("<color=yellow> Questions Updated</color>");
     }
 }

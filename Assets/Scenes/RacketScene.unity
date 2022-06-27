@@ -7085,7 +7085,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Answered: 0
-  _Choice: {fileID: 0}
+  _DataToLoad: 0
 --- !u!114 &117477391
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12148,7 +12148,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Answered: 0
-  _Choice: {fileID: 0}
+  _DataToLoad: 0
 --- !u!114 &186867205
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14616,14 +14616,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: cf632d2789b565b43a41e641ebe77a86, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -21448,12 +21448,12 @@ MonoBehaviour:
   _Choice1:
   - {fileID: 1317938351}
   _Choice2:
-  - {fileID: 0}
+  - {fileID: 117477388}
   _Choice3: []
   _Choice4: []
   _AlwaysClearOnClick:
   - {fileID: 1317938351}
-  - {fileID: 0}
+  - {fileID: 117477388}
   _ChoiceButtons: []
 --- !u!1 &325087247
 GameObject:
@@ -28519,7 +28519,7 @@ GameObject:
   - component: {fileID: 451018036}
   - component: {fileID: 451018038}
   m_Layer: 5
-  m_Name: Strings
+  m_Name: Dropdown - Strings
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -28599,7 +28599,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Answered: 0
-  _Choice: {fileID: 0}
+  _DataToLoad: 0
 --- !u!1 &454144809
 GameObject:
   m_ObjectHideFlags: 0
@@ -39258,14 +39258,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: cf632d2789b565b43a41e641ebe77a86, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -41161,14 +41161,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: cf632d2789b565b43a41e641ebe77a86, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -42855,7 +42855,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Answered: 0
-  _Choice: {fileID: 0}
+  _DataToLoad: 0
 --- !u!114 &666832580
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -43202,7 +43202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Answered: 0
-  _Choice: {fileID: 0}
+  _DataToLoad: 0
 --- !u!114 &669517916
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -50505,9 +50505,9 @@ MonoBehaviour:
   _Choice4: []
   _AlwaysClearOnClick:
   - {fileID: 1317938351}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 117477388}
+  - {fileID: 666832577}
+  - {fileID: 669517913}
   _ChoiceButtons: []
 --- !u!114 &801315693
 MonoBehaviour:
@@ -51366,6 +51366,7 @@ MonoBehaviour:
   _ElementData: []
   _PreciousData: []
   _ModelData: []
+  _CountryFlagsData: []
 --- !u!4 &813162046
 Transform:
   m_ObjectHideFlags: 0
@@ -51378,7 +51379,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &814373851
 GameObject:
@@ -66239,7 +66240,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1056337628
 GameObject:
@@ -67596,14 +67597,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: cf632d2789b565b43a41e641ebe77a86, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -73181,7 +73182,7 @@ MonoBehaviour:
   _Answered: 0
   _SelectedCondition: 5
   _Choice1:
-  - {fileID: 0}
+  - {fileID: 666832577}
   _Choice2: []
   _Choice3: []
   _Choice4: []
@@ -79915,7 +79916,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Answered: 0
-  _Choice: {fileID: 0}
+  _DataToLoad: 0
 --- !u!1 &1318435995
 GameObject:
   m_ObjectHideFlags: 0
@@ -84893,14 +84894,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: cf632d2789b565b43a41e641ebe77a86, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -89973,7 +89974,7 @@ GameObject:
   - component: {fileID: 1456027162}
   - component: {fileID: 1456027161}
   m_Layer: 5
-  m_Name: Dropdown - Grip
+  m_Name: Dropdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -90435,14 +90436,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: cf632d2789b565b43a41e641ebe77a86, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -94674,7 +94675,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _Answered: 0
-  _Choice: {fileID: 0}
+  _DataToLoad: 0
 --- !u!114 &1531820958
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121623,7 +121624,7 @@ GameObject:
   - component: {fileID: 1965016822}
   - component: {fileID: 1965016821}
   m_Layer: 5
-  m_Name: Dropdown - Strings
+  m_Name: Dropdown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -122636,14 +122637,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: cf632d2789b565b43a41e641ebe77a86, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -123186,7 +123187,7 @@ Transform:
   - {fileID: 1647482427}
   - {fileID: 748093465}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2007773045
 GameObject:
@@ -123508,7 +123509,7 @@ MonoBehaviour:
   _Answered: 0
   _SelectedCondition: 5
   _Choice1:
-  - {fileID: 0}
+  - {fileID: 669517913}
   _Choice2: []
   _Choice3: []
   _Choice4: []
@@ -127087,7 +127088,7 @@ Transform:
   m_Children:
   - {fileID: 963194228}
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2078453265
 GameObject:
@@ -129040,14 +129041,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 0}
+  m_Sprite: {fileID: 21300000, guid: cf632d2789b565b43a41e641ebe77a86, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -130798,7 +130799,7 @@ Transform:
   - {fileID: 362817543}
   - {fileID: 1938528987}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2137575671
 GameObject:

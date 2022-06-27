@@ -1,9 +1,6 @@
-using Dummiesman;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -12,11 +9,16 @@ public class DataLoader : Singleton<DataLoader>
     [SerializeField] private bool _UseLocalhost;
     private RacketLayoutController _LayoutController;
 
+    [Header("   TEXTURES Data")]
     [SerializeField] private List<ColorData> _ColorData;
     [SerializeField] private List<TextureData> _SkinData;
     [SerializeField] private List<TextureData> _ElementData;
     [SerializeField] private List<TextureData> _PreciousData;
+    [Header("   MODEL Data")]
     [SerializeField] private List<ModelData> _ModelData;
+    [Header("   DROPDOWN Data")]
+    [SerializeField] private List<CountryFlagsData> _CountryFlagsData;
+
 
     private readonly string _GetColorDataPhp = "GetColorData.php";
     private readonly string _GetSkinsDataPhp = "GetSkinData.php";
@@ -214,4 +216,10 @@ public struct ModelData
     public string name;
     public string model;
     public string price;
+}
+[Serializable]
+public struct CountryFlagsData
+{
+    public string name;
+    public string image;
 }
