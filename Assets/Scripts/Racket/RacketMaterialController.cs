@@ -10,7 +10,6 @@ public enum PartToModify
 
 }
 
-
 public class RacketMaterialController : Singleton<RacketMaterialController>
 {
     private Transform _Racket;
@@ -27,9 +26,11 @@ public class RacketMaterialController : Singleton<RacketMaterialController>
         _Buttcap = _Racket.GetChild(2);
     }
 
-
     public void ChangePart(PartToModify part, Color color)
     {
+        if (part == PartToModify.None)
+            return;
+
         var renderer = GetPartRenderer(part);
         var material = GetPartMaterial(part);
         renderer.material = new Material(material);
@@ -39,6 +40,9 @@ public class RacketMaterialController : Singleton<RacketMaterialController>
 
     public void ChangePart(PartToModify part, Texture2D texture)
     {
+        if (part == PartToModify.None)
+            return;
+
         var renderer = GetPartRenderer(part);
         var material = GetPartMaterial(part);
         renderer.material = new Material(material);

@@ -24,11 +24,13 @@ public class DataLoader : Singleton<DataLoader>
     private readonly string _GetSkinsDataPhp = "GetSkinData.php";
     private readonly string _GetElementDataPhp = "GetElementData.php";
     private readonly string _GetPreciousDataPhp = "GetPreciousData.php";
+    private readonly string _GetCountryFlagDataPhp = "GetCountryFlagData.php"; 
 
     private bool _IsColorDataLoaded;
     private bool _IsSkinsDataLoaded;
     private bool _IsElementDataLoaded;
     private bool _IsPreciousDataLoaded;
+    private bool _IsCountryFlagDataLoaded;
 
     private string _ServerName;
     private string _UserName;
@@ -64,6 +66,7 @@ public class DataLoader : Singleton<DataLoader>
         StartCoroutine(RequestTextureData(_ScriptsPath + _GetSkinsDataPhp, form, _SkinData, verifier => _IsSkinsDataLoaded = verifier));
         StartCoroutine(RequestTextureData(_ScriptsPath + _GetElementDataPhp, form, _ElementData, verifier => _IsElementDataLoaded = verifier));
         StartCoroutine(RequestTextureData(_ScriptsPath + _GetPreciousDataPhp, form, _PreciousData, verifier => _IsPreciousDataLoaded = verifier));
+        StartCoroutine(RequestCountryFlagData(_ScriptsPath + _GetCountryFlagDataPhp, form, _CountryFlagsData, verifier => _IsCountryFlagDataLoaded = verifier));
     }
 
     private IEnumerator RequestColorData(string uri, WWWForm form)
@@ -170,11 +173,60 @@ public class DataLoader : Singleton<DataLoader>
             }
         }
     }
+    private IEnumerator RequestCountryFlagData(string uri, WWWForm form, List<CountryFlagsData> data, System.Action<bool> verifier)
+    {
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+        {
+            yield return webRequest.SendWebRequest();
 
+            string[] pages = uri.Split('/');
+            int page = pages.Length - 1;
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                    Debug.LogError("<color=red>" + pages[page] + ": Error [Connection Error]: " + webRequest.error + "</color>");
+                    _IsColorDataLoaded = false;
+                    break;
+
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError("<color=red>" + pages[page] + ": Error [Data Processing Error]: " + webRequest.error + "</color>");
+                    _IsColorDataLoaded = false;
+                    break;
+
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError("<color=red>" + pages[page] + ": Error [Protocol Error]: " + webRequest.error + "</color>");
+                    _IsColorDataLoaded = false;
+                    break;
+
+                case UnityWebRequest.Result.Success:
+                    Debug.Log("<color=green>" + pages[page] + " Successfull:</color>" + "\nReceived: " + webRequest.downloadHandler.text);
+                    verifier.Invoke(true);
+
+                    string[] splitScores = webRequest.downloadHandler.text.Trim().Split('\n');
+                    for (int i = 0; i < splitScores.Length; i++)
+                    {
+                        string[] temp = splitScores[i].Split('.');
+
+                        var countryFlagData = new CountryFlagsData();
+                        countryFlagData.name = temp[0];
+                        countryFlagData.image = temp[1];
+
+                        data.Add(countryFlagData);
+                    }
+
+                    if (AllDataIsLoaded())
+                        _LayoutController.SetupApp();
+
+                    break;
+            }
+        }
+    }
     public List<ColorData> GetColorData() => _ColorData;
     public List<TextureData> GetSkinData() => _SkinData;
     public List<TextureData> GetElementData() => _ElementData;
     public List<TextureData> GetPreciousData() => _PreciousData;
+    public List<CountryFlagsData> GetCountryFlagData() => _CountryFlagsData;
 
     private bool AllDataIsLoaded()
     {
@@ -189,7 +241,10 @@ public class DataLoader : Singleton<DataLoader>
 
         if (!_IsPreciousDataLoaded)
             return false;
-        
+
+        if (!_IsCountryFlagDataLoaded)
+            return false;
+
         Debug.Log("<color=green> All Data Loaded Sucessfully! </color>");
         return true;
 

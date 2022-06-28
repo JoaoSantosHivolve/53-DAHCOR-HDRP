@@ -68,57 +68,60 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         (_Question as RacketLayoutQuestionIcon).OnAnsweringQuestion();
     }
 
-    public IEnumerator UpdateComponents()
+    public void SetComponentsSize(float value)
     {
-        var height = _ImageMask.GetComponent<RectTransform>().rect.height;
-        _ImageMask.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
-        _Outline.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
-        _SecondOutline.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
-
-        yield return new WaitForEndOfFrame(); // The second one is to prevent the 0 width bug
-
-        height = _ImageMask.GetComponent<RectTransform>().rect.height;
-        _ImageMask.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
-        _Outline.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
-        _SecondOutline.GetComponent<RectTransform>().sizeDelta = new Vector2(height, 0);
+        var multiplier = _ImageMask.rectTransform.anchorMax.y - _ImageMask.rectTransform.anchorMin.y;
+        var newWidth = value * multiplier;
+        _ImageMask.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, 0);
+        _Outline.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, 0);
+        _SecondOutline.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, 0);
     }
     public void SetUnselected()
     {
         _Outline.SetActive(false);
     }
-    public void SetData(PartToModify partToModify, Sprite image, string name, string price)
+
+    public void SetData(PartToModify partToModify, string name, string price, string color)
     {
-        SetComponents(image, name, price);
-
-        SetUnselected();
-
-        _PartToModify = partToModify;
-        _Type = ChoiceIconType.Texture;
-        _DataTexture = image.texture;
-    }
-
-    public void SetData(PartToModify partToModify, Sprite image, string name, string color, string price)
-    {
-        SetComponents(image, name, price);
-
-        var r = int.Parse(color.Substring(0, 3));
-        var g = int.Parse(color.Substring(3, 3));
-        var b = int.Parse(color.Substring(6, 3));
-        var newColor = new Color(r / 255f, g / 255f, b / 255f);
-        _Image.color = newColor;
+        SetComponentsData(name, price, color);
 
         SetUnselected();
 
         _PartToModify = partToModify;
         _Type = ChoiceIconType.Color;
-        _DataColor = newColor;
+    }
+    public void SetData(PartToModify partToModify, string name, string price, Sprite image)
+    {
+        SetComponentsData(name, price, image);
+        SetUnselected();
+
+        _PartToModify = partToModify;
+        _Type = ChoiceIconType.Texture;
     }
 
-    private void SetComponents(Sprite image, string name, string price)
+    private void SetComponentsData(string name, string price)
     {
-        _Image.sprite = image;
         _Name.text = name;
         _Price.text = "+" + price;
+    }
+    private void SetComponentsData(string name, string price, Sprite image)
+    {
+        SetComponentsData(name, price);
+
+        _Image.sprite = image == null ? _Image.sprite : image;
+        _DataTexture = image.texture;
+    }
+    private void SetComponentsData(string name, string price, string color)
+    {
+        SetComponentsData(name, price);
+
+        var r = int.Parse(color.Substring(0, 3));
+        var g = int.Parse(color.Substring(3, 3));
+        var b = int.Parse(color.Substring(6, 3));
+        var newColor = new Color(r / 255f, g / 255f, b / 255f);
+        
+        _Image.color = newColor;
+        _DataColor = newColor;
     }
 
     [ContextMenu("Change Font Size")]

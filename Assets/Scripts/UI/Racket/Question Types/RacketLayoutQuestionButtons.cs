@@ -10,7 +10,7 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
     [SerializeField] private List<GameObject> _Choice3;
     [SerializeField] private List<GameObject> _Choice4;
     [SerializeField] private List<GameObject> _AlwaysClearOnClick;
-    [SerializeField] private RacketLayoutChoiceButton[] _ChoiceButtons;
+    private RacketLayoutChoiceButton[] _ChoiceButtons;
 
     private void Awake()
     {

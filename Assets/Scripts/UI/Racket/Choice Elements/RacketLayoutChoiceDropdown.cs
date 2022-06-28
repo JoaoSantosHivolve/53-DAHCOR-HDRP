@@ -27,6 +27,8 @@ public class RacketLayoutChoiceDropdown : RacketLayoutChoiceElement
             _Question.SetAnswered();
     }
 
+    public TMP_Dropdown GetDropdown() => _Dropdown;
+
     [ContextMenu("Change Font Size")]
     void ChangeFontSize()
     {

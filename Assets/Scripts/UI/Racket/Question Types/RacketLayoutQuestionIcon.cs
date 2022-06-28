@@ -18,31 +18,28 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
     [SerializeField] private PartToModify _PartToModify = PartToModify.None;
 
     private GridLayoutGroup _GridLayoutGroup;
-    [SerializeField] private List<RacketLayoutChoiceIcon> _Cells;
+    private List<RacketLayoutChoiceIcon> _Cells;
 
     private void OnEnable()
     {
        if (_GridLayoutGroup == null)
            return;
        
-       RefreshUi();
-       
-       var cellWidth = transform.GetComponent<RectTransform>().rect.width / 4f;
-       _GridLayoutGroup.cellSize = new Vector2(cellWidth, cellWidth);
-       _GridLayoutGroup.spacing = new Vector2(0, 0);
-       
-       RefreshUi();
-       
-       foreach (var item in _Cells)
-       {
-           StartCoroutine(item.UpdateComponents());
-       }
+       //foreach (var item in _Cells)
+       //{
+       //    StartCoroutine(item.UpdateComponents());
+       //}
     }
 
     public override void Initialize()
     {
         _GridLayoutGroup = transform.Find("Grid").GetComponent<GridLayoutGroup>();
         _Cells = new List<RacketLayoutChoiceIcon>();
+
+        //var cellWidth = transform.GetComponent<RectTransform>().rect.width / 4f;
+        var cellWidth = 472.1125f / 4f; // 472.1125f is the with of the panel, when the opening animation ends
+        _GridLayoutGroup.cellSize = new Vector2(cellWidth, cellWidth);
+        _GridLayoutGroup.spacing = new Vector2(0, 0);
     }
     public override void OnReset()
     {
@@ -59,55 +56,54 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
         // clear grid before populating with new data
         ClearGrid();
 
-        // Populate grid
-        var prefab = Resources.Load<RacketLayoutChoiceIcon>("Prefabs/Ui/IconDisplay");
-
+        // Leave function if no data to load
         if (_DataTypeToLoad == DataTypeToLoad.NotSetYet)
-        {
             return;
+
+        // Get icon prefab
+        var prefab = Resources.Load<RacketLayoutChoiceIcon>("Prefabs/Ui/IconDisplay");
+        var parent = _GridLayoutGroup.transform;
+
+        // Colors
+        if (_DataTypeToLoad == DataTypeToLoad.Colors)
+        {
+            var colorData = DataLoader.Instance.GetColorData();
+
+            for (int i = 0; i < colorData.Count; i++)
+            {
+                var currentColorData = colorData[i];
+                var cell = Instantiate(prefab.gameObject, parent).GetComponent<RacketLayoutChoiceIcon>();
+                cell.InitializeChoiceElement(this);
+                cell.SetData(_PartToModify, currentColorData.name, currentColorData.price, currentColorData.color);
+                cell.SetComponentsSize(_GridLayoutGroup.cellSize.y);
+
+                _Cells.Add(cell);
+            }
         }
+        // Skins // Element // Precious
         else
         {
-            // Colors
-            if (_DataTypeToLoad == DataTypeToLoad.Colors)
+            // Get data
+            var textureData = GetCurrentTextureData();
+
+            for (int i = 0; i < textureData.Count; i++)
             {
-                var colorData = DataLoader.Instance.GetColorData();
-                var circleSprite = Resources.Load<Sprite>("Images/Circle");
+                var currentTextureData = textureData[i];
 
-                for (int i = 0; i < colorData.Count; i++)
-                {
-                    var currentData = colorData[i];
-                    var cell = Instantiate(prefab.gameObject, _GridLayoutGroup.transform).GetComponent<RacketLayoutChoiceIcon>();
-                    cell.InitializeChoiceElement(this);
-                    cell.SetData(_PartToModify, circleSprite, currentData.name, currentData.color, currentData.price);
+                var textureString = currentTextureData.texture;
+                var convertedTextureData = System.Convert.FromBase64String(textureString);
+                var texture = new Texture2D(128, 128);
+                texture.LoadImage(convertedTextureData);
+                var skinTextureSprite = Sprite.Create(texture,
+                        new Rect(0.0f, 0.0f,texture.width, texture.height),
+                        new Vector2(0.5f, 0.5f), 100.0f);
 
-                    _Cells.Add(cell);
-                }
-            }
-            // Skins // Element // Precious
-            else
-            {
-                // Get data
-                var data = GetCurrentTextureData();
+                var cell = Instantiate(prefab.gameObject, parent).GetComponent<RacketLayoutChoiceIcon>();
+                cell.InitializeChoiceElement(this);
+                cell.SetData(_PartToModify, currentTextureData.name, currentTextureData.price, skinTextureSprite);
+                cell.SetComponentsSize(_GridLayoutGroup.cellSize.y);
 
-                for (int i = 0; i < data.Count; i++)
-                {
-                    var currentData = data[i];
-
-                    var textureString = currentData.texture;
-                    var textureData = System.Convert.FromBase64String(textureString);
-                    var texture = new Texture2D(128, 128);
-                    texture.LoadImage(textureData);
-                    var skinTextureSprite = Sprite.Create(texture,
-                            new Rect(0.0f, 0.0f,texture.width, texture.height),
-                            new Vector2(0.5f, 0.5f), 100.0f);
-
-                    var cell = Instantiate(prefab.gameObject, _GridLayoutGroup.transform).GetComponent<RacketLayoutChoiceIcon>();
-                    cell.InitializeChoiceElement(this);
-                    cell.SetData(_PartToModify, skinTextureSprite, currentData.name, currentData.price);
-
-                    _Cells.Add(cell);
-                }
+                _Cells.Add(cell);
             }
         }
     }
