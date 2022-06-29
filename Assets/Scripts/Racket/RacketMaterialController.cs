@@ -7,7 +7,10 @@ public enum PartToModify
     None,
     Body,
     Head,
-    Bumper
+    Bumper,
+    Strings,
+    Grip,
+    Buttcap
 }
 
 public enum PremadeFinish
@@ -24,6 +27,9 @@ public class RacketMaterialController : Singleton<RacketMaterialController>
     private Transform _Body;
     private Transform _Head;
     private Transform _Bumper;
+    private Transform _Strings;
+    private Transform _Grip;
+    private Transform _Buttcap;
 
     public override void Awake()
     {
@@ -34,6 +40,9 @@ public class RacketMaterialController : Singleton<RacketMaterialController>
         _Body = _Racket.GetChild(3);
         _Head = _Racket.GetChild(0);
         _Bumper = _Racket.GetChild(1);
+        _Strings = _Racket.GetChild(6);
+        _Grip = _Racket.GetChild(5);
+        _Buttcap = _Racket.GetChild(2);
     }
 
     public void ChangePart(PartToModify part, Color color)
@@ -108,6 +117,12 @@ public class RacketMaterialController : Singleton<RacketMaterialController>
                 return _Head.GetComponent<MeshRenderer>();
             case PartToModify.Bumper:
                 return _Bumper.GetComponent<MeshRenderer>();
+            case PartToModify.Strings:
+                return _Strings.GetComponent<MeshRenderer>();
+            case PartToModify.Grip:
+                return _Grip.GetComponent<MeshRenderer>();
+            case PartToModify.Buttcap:
+                return _Buttcap.GetComponent<MeshRenderer>();
             default:
                 return null;
         }
@@ -119,14 +134,10 @@ public class RacketMaterialController : Singleton<RacketMaterialController>
         {
             case PartToModify.None:
                 return null;
-            case PartToModify.Bumper:
-                return Resources.Load<Material>("Materials/Racket/ButtcapMat");
-            case PartToModify.Body:
-                return Resources.Load<Material>("Materials/Racket/ButtcapMat");
-            case PartToModify.Head:
-                return Resources.Load<Material>("Materials/Racket/ButtcapMat");
+            case PartToModify.Grip:
+                return Resources.Load<Material>("Materials/Racket/GripMat");
             default:
-                return null;
+                return Resources.Load<Material>("Materials/Racket/RacketMat");
         }
     }
 }

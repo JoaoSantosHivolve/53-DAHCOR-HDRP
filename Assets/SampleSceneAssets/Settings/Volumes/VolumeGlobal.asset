@@ -415,7 +415,7 @@ MonoBehaviour:
     showEyeDropper: 1
   tint:
     m_OverrideState: 1
-    m_Value: {r: 4, g: 4, b: 4, a: 1}
+    m_Value: {r: 33.89676, g: 33.89676, b: 33.89676, a: 1}
     hdr: 1
     showAlpha: 0
     showEyeDropper: 1
@@ -790,14 +790,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 384c4d03a551c44448145f4093304119, type: 3}
   m_Name: ScreenSpaceReflection
   m_EditorClassIdentifier: 
-  active: 0
+  active: 1
   m_AdvancedMode: 0
   quality:
     m_OverrideState: 1
     m_Value: 2
   enabled:
-    m_OverrideState: 0
-    m_Value: 0
+    m_OverrideState: 1
+    m_Value: 1
   usedAlgorithm:
     m_OverrideState: 1
     m_Value: 0
