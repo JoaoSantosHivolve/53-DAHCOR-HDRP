@@ -81,9 +81,9 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         _Outline.SetActive(false);
     }
 
-    public void SetData(PartToModify partToModify, string name, string price, string color)
+    public void SetData(PartToModify partToModify, Color color)
     {
-        SetComponentsData(name, price, color);
+        SetComponentsData("", "", color);
 
         SetUnselected();
 
@@ -111,17 +111,19 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         _Image.sprite = image == null ? _Image.sprite : image;
         _DataTexture = image.texture;
     }
-    private void SetComponentsData(string name, string price, string color)
+    private void SetComponentsData(string name, string price, Color color)
     {
         SetComponentsData(name, price);
 
-        var r = int.Parse(color.Substring(0, 3));
-        var g = int.Parse(color.Substring(3, 3));
-        var b = int.Parse(color.Substring(6, 3));
-        var newColor = new Color(r / 255f, g / 255f, b / 255f);
-        
-        _Image.color = newColor;
-        _DataColor = newColor;
+        _Image.color = color;
+        _DataColor = color;
+
+      
+
+        //var r = int.Parse(color.Substring(0, 3));
+        //var g = int.Parse(color.Substring(3, 3));
+        //var b = int.Parse(color.Substring(6, 3));
+        //var newColor = new Color(r / 255f, g / 255f, b / 255f);
     }
 
     [ContextMenu("Change Font Size")]

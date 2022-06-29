@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// WAS USED ON OLD UI - NOT USED ANYMORE
+
 // BUG FIX FOR THE CHANGE BETWEN "DAHCOR" "YOU" CHOICES
 public class RacketLayoutExtraEffect_ResetScrollbarToTheTop : RacketLayoutExtraEffect
 {
@@ -11,7 +13,7 @@ public class RacketLayoutExtraEffect_ResetScrollbarToTheTop : RacketLayoutExtraE
 
     public override void OnClickEffect()
     {
-        if(targetQuestion.GetCurrentCondition() == Condition.ConditionTwo)
-            scrollbar.value = 1;
+        //if(targetQuestion.GetCurrentCondition() == Condition.ConditionTwo)
+        //    scrollbar.value = 1;
     }
 }

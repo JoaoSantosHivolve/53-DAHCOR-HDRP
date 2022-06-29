@@ -7,9 +7,7 @@ public enum DataTypeToLoad
 {
     NotSetYet,
     Colors,
-    Skins,
-    Element,
-    Precious
+    Woods
 }
 
 public class RacketLayoutQuestionIcon : RacketLayoutQuestion
@@ -53,6 +51,17 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
     }
     public override void UpdateData()
     {
+        InstantiateGrid(_DataTypeToLoad);
+    }
+
+    public void InstantiateGrid(int index)
+    {
+        InstantiateGrid((DataTypeToLoad)index);
+    }
+    private void InstantiateGrid(DataTypeToLoad dataToLoad)
+    {
+        _DataTypeToLoad = dataToLoad;
+
         // clear grid before populating with new data
         ClearGrid();
 
@@ -74,40 +83,29 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
                 var currentColorData = colorData[i];
                 var cell = Instantiate(prefab.gameObject, parent).GetComponent<RacketLayoutChoiceIcon>();
                 cell.InitializeChoiceElement(this);
-                cell.SetData(_PartToModify, currentColorData.name, currentColorData.price, currentColorData.color);
+                cell.SetData(_PartToModify, currentColorData.color);
                 cell.SetComponentsSize(_GridLayoutGroup.cellSize.y);
 
                 _Cells.Add(cell);
             }
         }
-        // Skins // Element // Precious
+        // Immaterials
         else
         {
-            // Get data
             var textureData = GetCurrentTextureData();
 
             for (int i = 0; i < textureData.Count; i++)
             {
                 var currentTextureData = textureData[i];
-
-                var textureString = currentTextureData.texture;
-                var convertedTextureData = System.Convert.FromBase64String(textureString);
-                var texture = new Texture2D(128, 128);
-                texture.LoadImage(convertedTextureData);
-                var skinTextureSprite = Sprite.Create(texture,
-                        new Rect(0.0f, 0.0f,texture.width, texture.height),
-                        new Vector2(0.5f, 0.5f), 100.0f);
-
                 var cell = Instantiate(prefab.gameObject, parent).GetComponent<RacketLayoutChoiceIcon>();
                 cell.InitializeChoiceElement(this);
-                cell.SetData(_PartToModify, currentTextureData.name, currentTextureData.price, skinTextureSprite);
+                cell.SetData(_PartToModify, currentTextureData.byoName, "0", currentTextureData.baseMap);
                 cell.SetComponentsSize(_GridLayoutGroup.cellSize.y);
 
                 _Cells.Add(cell);
             }
         }
     }
-
     public void ClearOtherSelectedIcons(RacketLayoutChoiceIcon icon)
     {
         foreach (RacketLayoutChoiceIcon item in _Cells)
@@ -121,12 +119,8 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
     {
         switch (_DataTypeToLoad)
         {
-            case DataTypeToLoad.Skins:
-                return DataLoader.Instance.GetSkinData();
-            case DataTypeToLoad.Element:
-                return DataLoader.Instance.GetElementData();
-            case DataTypeToLoad.Precious:
-                return DataLoader.Instance.GetPreciousData();
+            case DataTypeToLoad.Woods:
+                return DataLoader.Instance.GetWoodData();
             default:
                 return null;
         }

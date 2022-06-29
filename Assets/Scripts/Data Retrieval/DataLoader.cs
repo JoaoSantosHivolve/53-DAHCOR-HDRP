@@ -11,31 +11,25 @@ public class DataLoader : Singleton<DataLoader>
 
     [Header("   TEXTURES Data")]
     [SerializeField] private List<ColorData> _ColorData;
-    [SerializeField] private List<TextureData> _SkinData;
-    [SerializeField] private List<TextureData> _ElementData;
-    [SerializeField] private List<TextureData> _PreciousData;
-    [Header("   MODEL Data")]
-    [SerializeField] private List<ModelData> _ModelData;
+    [SerializeField] private List<TextureData> _WoodData;
     [Header("   DROPDOWN Data")]
     [SerializeField] private List<CountryFlagsData> _CountryFlagsData;
 
-
     private readonly string _GetColorDataPhp = "GetColorData.php";
-    private readonly string _GetSkinsDataPhp = "GetSkinData.php";
-    private readonly string _GetElementDataPhp = "GetElementData.php";
-    private readonly string _GetPreciousDataPhp = "GetPreciousData.php";
+    private readonly string _GetTextureDataPhp = "GetTextureData.php";
     private readonly string _GetCountryFlagDataPhp = "GetCountryFlagData.php"; 
 
     private bool _IsColorDataLoaded;
-    private bool _IsSkinsDataLoaded;
-    private bool _IsElementDataLoaded;
-    private bool _IsPreciousDataLoaded;
+    private bool _IsWoodsDataLoaded;
     private bool _IsCountryFlagDataLoaded;
 
     private string _ServerName;
     private string _UserName;
     private string _Password;
     private string _ScriptsPath;
+
+    private const int TEXTURE_SIZE = 256;
+    private const string WOOD_DB = "Woods";
 
     public override void Awake()
     {
@@ -47,10 +41,7 @@ public class DataLoader : Singleton<DataLoader>
         _ScriptsPath = "//" + _ServerName + "/dahcor_backend/";
 
         _ColorData = new List<ColorData>();
-        _SkinData = new List<TextureData>();
-        _ElementData = new List<TextureData>();
-        _PreciousData = new List<TextureData>();
-        _ModelData = new List<ModelData>();
+        _WoodData = new List<TextureData>();
 
         _LayoutController = GameObject.Find("Layout Controller").GetComponent<RacketLayoutController>();
     }
@@ -62,10 +53,11 @@ public class DataLoader : Singleton<DataLoader>
         form.AddField("UserNamePost", _UserName);
         form.AddField("PasswordPost", _Password);
 
+        // Color data
         StartCoroutine(RequestColorData(_ScriptsPath + _GetColorDataPhp, form));
-        StartCoroutine(RequestTextureData(_ScriptsPath + _GetSkinsDataPhp, form, _SkinData, verifier => _IsSkinsDataLoaded = verifier));
-        StartCoroutine(RequestTextureData(_ScriptsPath + _GetElementDataPhp, form, _ElementData, verifier => _IsElementDataLoaded = verifier));
-        StartCoroutine(RequestTextureData(_ScriptsPath + _GetPreciousDataPhp, form, _PreciousData, verifier => _IsPreciousDataLoaded = verifier));
+        // Immaterials
+        StartCoroutine(RequestTextureData(_ScriptsPath + _GetTextureDataPhp, form, WOOD_DB, _WoodData, verifier => _IsWoodsDataLoaded = verifier));
+        // Flags Data
         StartCoroutine(RequestCountryFlagData(_ScriptsPath + _GetCountryFlagDataPhp, form, _CountryFlagsData, verifier => _IsCountryFlagDataLoaded = verifier));
     }
 
@@ -105,9 +97,11 @@ public class DataLoader : Singleton<DataLoader>
                         string[] temp = splitScores[i].Split('.');
 
                         var data = new ColorData();
-                        data.name = temp[0];
-                        data.color = temp[1];
-                        data.price = temp[2];
+                        data.id = temp[0];
+                        if (ColorUtility.TryParseHtmlString("#" + temp[1], out var convertedColor))
+                        {
+                            data.color = convertedColor;
+                        }
 
                         _ColorData.Add(data);
                     }
@@ -123,8 +117,11 @@ public class DataLoader : Singleton<DataLoader>
             }
         }
     }
-    private IEnumerator RequestTextureData(string uri, WWWForm form, List<TextureData> data, System.Action<bool> verifier)
+    private IEnumerator RequestTextureData(string uri, WWWForm form, string database, List<TextureData> data, System.Action<bool> verifier)
     {
+        // Add select database to get data
+        form.AddField("DataBase", database);
+
         using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
         {
             yield return webRequest.SendWebRequest();
@@ -159,9 +156,19 @@ public class DataLoader : Singleton<DataLoader>
                         string[] temp = splitScores[i].Split('.');
 
                         var textureData = new TextureData();
-                        textureData.name = temp[0];
-                        textureData.texture = temp[1];
-                        textureData.price = temp[2];
+                        textureData.id = temp[0];
+                        textureData.byoName = temp[1];
+                        textureData.cgaixList = temp[2];
+                        textureData.originalName = temp[3];
+
+                        var textureString = temp[4];
+                        var convertedTextureData = System.Convert.FromBase64String(textureString);
+                        var texture = new Texture2D(TEXTURE_SIZE, TEXTURE_SIZE);
+                        texture.LoadImage(convertedTextureData);
+                        var textureSprite = Sprite.Create(texture,
+                                new Rect(0.0f, 0.0f, texture.width, texture.height),
+                                new Vector2(0.5f, 0.5f), 100.0f);
+                        textureData.baseMap = textureSprite;
 
                         data.Add(textureData);
                     }
@@ -223,9 +230,7 @@ public class DataLoader : Singleton<DataLoader>
         }
     }
     public List<ColorData> GetColorData() => _ColorData;
-    public List<TextureData> GetSkinData() => _SkinData;
-    public List<TextureData> GetElementData() => _ElementData;
-    public List<TextureData> GetPreciousData() => _PreciousData;
+    public List<TextureData> GetWoodData() => _WoodData;
     public List<CountryFlagsData> GetCountryFlagData() => _CountryFlagsData;
 
     private bool AllDataIsLoaded()
@@ -233,17 +238,11 @@ public class DataLoader : Singleton<DataLoader>
         if (!_IsColorDataLoaded)
             return false;
 
-        if (!_IsSkinsDataLoaded)
+        if (!_IsWoodsDataLoaded)
             return false;
 
-        if (!_IsElementDataLoaded)
-            return false;
-
-        if (!_IsPreciousDataLoaded)
-            return false;
-
-        if (!_IsCountryFlagDataLoaded)
-            return false;
+        //if (!_IsCountryFlagDataLoaded)
+        //    return false;
 
         Debug.Log("<color=green> All Data Loaded Sucessfully! </color>");
         return true;
@@ -254,23 +253,17 @@ public class DataLoader : Singleton<DataLoader>
 [Serializable]
 public struct ColorData
 {
-    public string name;
-    public string color;
-    public string price;
+    public string id;
+    public Color color;
 }
 [Serializable]
 public struct TextureData
 {
-    public string name;
-    public string texture;
-    public string price;
-}
-[Serializable]
-public struct ModelData
-{
-    public string name;
-    public string model;
-    public string price;
+    public string id;
+    public string byoName;
+    public string cgaixList;
+    public string originalName;
+    public Sprite baseMap;
 }
 [Serializable]
 public struct CountryFlagsData

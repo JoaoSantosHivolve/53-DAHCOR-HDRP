@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
 {
-    [SerializeField] protected Condition _Condition = Condition.NoCondition;
+    private int _AnswerIndex;
     private Color _SelectedColor = Color.black;
     private Color _UnselectedColor = new Color(213f/255f, 213f/255f, 213f/255f);
     private Button _Button;
@@ -29,8 +29,10 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
         (_Question as RacketLayoutQuestionButtons).ClearOtherSelectedButtons(this);
 
         // Send condition if any
-        (_Question as RacketLayoutQuestionButtons).OnSelectingChoice(_Condition);
+        (_Question as RacketLayoutQuestionButtons).OnSelectingChoice(_AnswerIndex);
     }
+
+    public void SetIndex(int index) => _AnswerIndex = index;
 
     public void SetUnselected()
     {

@@ -1,16 +1,34 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Serializable]
+public struct AnswerEventGroup
+{
+    public string name; // used only to make inspector easier to read
+    public List<AnswerEvent> events;
+}
+[Serializable]
+public struct AnswerEvent
+{
+    public GameObject target;
+    public bool active;
+}
+
 public class RacketLayoutQuestionButtons : RacketLayoutQuestion
 {
-    [SerializeField] private Condition _SelectedCondition = Condition.NoConditionSetYet;
-    [SerializeField] private List<GameObject> _Choice1;
-    [SerializeField] private List<GameObject> _Choice2;
-    [SerializeField] private List<GameObject> _Choice3;
-    [SerializeField] private List<GameObject> _Choice4;
-    [SerializeField] private List<GameObject> _AlwaysClearOnClick;
+    //[SerializeField] private Condition _SelectedCondition = Condition.NoConditionSetYet;
+    //[SerializeField] private List<GameObject> _Choice1;
+    //[SerializeField] private List<GameObject> _Choice2;
+    //[SerializeField] private List<GameObject> _Choice3;
+    //[SerializeField] private List<GameObject> _Choice4;
+    //[SerializeField] private List<GameObject> _AlwaysClearOnClick;
     private RacketLayoutChoiceButton[] _ChoiceButtons;
+
+    private int _SelectedAnswer = 99;
+    [SerializeField] private AnswerEventGroup[] _AnswerEvents;
+    [SerializeField] private AnswerEventGroup _OnInitializeEvent;
 
     private void Awake()
     {
@@ -22,22 +40,29 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
         if (!_Initialized)
             return;
 
-        if (!_Answered)
-            ClearChoices();
+        //if (!_Answered)
+           // ClearChoices();
         if (_Answered)
-            SetChoice();
+            SetChoice(_SelectedAnswer);
     }
 
     public override void Initialize()
     {
-        foreach (var item in _ChoiceButtons)
+        for (int i = 0; i < _ChoiceButtons.Length; i++)
         {
-            item.InitializeChoiceElement(this);
+            _ChoiceButtons[i].InitializeChoiceElement(this);
+            _ChoiceButtons[i].SetIndex(i);
+        }
+
+        for (int i = 0; i < _OnInitializeEvent.events.Count; i++)
+        {
+            var aEvent = _OnInitializeEvent.events[i];
+            aEvent.target.SetActive(aEvent.active);
         }
 
         OnEnable();
 
-        ClearChoices();
+        //ClearChoices();
     }
     public override void UpdateData()
     {
@@ -61,54 +86,54 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
             }
         }
     }
-    public void OnSelectingChoice(Condition condition)
+    public void OnSelectingChoice(int answer)
     {
-        _SelectedCondition = condition;
+        if (_SelectedAnswer != answer)
+            SetChoice(answer);
 
-        ClearChoices();
+        _SelectedAnswer = answer;
 
-        if (_SelectedCondition != Condition.NoCondition)
-            SetChoice();
+        // ClearChoices();
+
+        //if (_SelectedCondition != Condition.NoCondition)
+        //    SetChoice();
 
         OnAnsweringQuestion();
     }
-    public Condition GetCurrentCondition() => _SelectedCondition;
+    
+    private void SetChoice(int answer)
+    {
+        if (_AnswerEvents.Length <= answer)
+            return;
 
-    private void ClearChoices()
-    {
-        foreach (var item in _Choice1)
-            item.SetActive(false);
-        foreach (var item in _Choice2)
-            item.SetActive(false);
-        foreach (var item in _Choice3)
-            item.SetActive(false);
-        foreach (var item in _Choice4)
-            item.SetActive(false);
-        foreach (var item in _AlwaysClearOnClick)
-            item.SetActive(false);
-    }
-    private void SetChoice()
-    {
-        switch (_SelectedCondition)
+        for (int i = 0; i < _AnswerEvents[answer].events.Count; i++)
         {
-            case Condition.ConditionOne:
-                foreach (var item in _Choice1)
-                    item.SetActive(true);
-                break;
-            case Condition.ConditionTwo:
-                foreach (var item in _Choice2)
-                    item.SetActive(true);
-                break;
-            case Condition.ConditionThree:
-                foreach (var item in _Choice3)
-                    item.SetActive(true);
-                break;
-            case Condition.ConditionFour:
-                foreach (var item in _Choice4)
-                    item.SetActive(true);
-                break;
-            default:
-                break;
+            var aEvent = _AnswerEvents[answer].events[i];
+            
+            if(aEvent.target != null)
+                aEvent.target.SetActive(aEvent.active);
         }
+
+        //switch (_SelectedCondition)
+        //{
+        //    case Condition.ConditionOne:
+        //        foreach (var item in _Choice1)
+        //            item.SetActive(true);
+        //        break;
+        //    case Condition.ConditionTwo:
+        //        foreach (var item in _Choice2)
+        //            item.SetActive(true);
+        //        break;
+        //    case Condition.ConditionThree:
+        //        foreach (var item in _Choice3)
+        //            item.SetActive(true);
+        //        break;
+        //    case Condition.ConditionFour:
+        //        foreach (var item in _Choice4)
+        //            item.SetActive(true);
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 }
