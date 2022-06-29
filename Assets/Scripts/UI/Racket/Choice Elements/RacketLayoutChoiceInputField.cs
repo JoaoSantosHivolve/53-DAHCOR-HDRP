@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnityEngine;
 
 public class RacketLayoutChoiceInputField : RacketLayoutChoiceElement
 {
@@ -11,18 +7,14 @@ public class RacketLayoutChoiceInputField : RacketLayoutChoiceElement
     protected override void Initialize()
     {
         _InputField = GetComponent<TMP_InputField>();
-        _InputField.onValueChanged.AddListener(OnValueChange);
+        _InputField.onValueChanged.AddListener(OnValueChanged);
     }
 
-    private void OnValueChange(string arg0)
+    private void OnValueChanged(string arg0)
     {
         if(arg0 != "")
         {
-            if (_SetAnswered)
-                _Question.SetAnswered();
+            _Question.SetAnswered();
         }
-
-        // Send condition if any
-        _Question.OnAnsweringQuestion();
     }
 }

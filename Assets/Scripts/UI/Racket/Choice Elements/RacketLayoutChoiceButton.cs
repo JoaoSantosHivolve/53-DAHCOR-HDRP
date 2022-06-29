@@ -18,10 +18,6 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
 
     private void OnClick()
     {
-        // Set question answered
-        if (_SetAnswered)
-            _Question.SetAnswered();
-
         // Change Button Outline Color
         _Image.color = _SelectedColor;
 
@@ -30,6 +26,9 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
 
         // Send condition if any
         (_Question as RacketLayoutQuestionButtons).OnSelectingChoice(_AnswerIndex);
+
+        // Set question answered
+        _Question.SetAnswered();
     }
 
     public void SetIndex(int index) => _AnswerIndex = index;

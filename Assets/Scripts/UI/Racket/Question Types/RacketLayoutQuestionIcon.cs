@@ -20,13 +20,7 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
 
     private void OnEnable()
     {
-       if (_GridLayoutGroup == null)
-           return;
-       
-       //foreach (var item in _Cells)
-       //{
-       //    StartCoroutine(item.UpdateComponents());
-       //}
+        RefreshUi(); // Fixes visual bugs
     }
 
     public override void Initialize()

@@ -42,8 +42,13 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
     private void OnClick()
     {
         // Set question answered
-        if (_SetAnswered)
-            _Question.SetAnswered();
+        _Question.SetAnswered();
+
+        // Set outline
+        _Outline.SetActive(true);
+
+        // Set other buttons Unselected
+        (_Question as RacketLayoutQuestionIcon).ClearOtherSelectedIcons(this);
 
         // Change racket model
         switch (_Type)
@@ -57,15 +62,6 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
             default:
                 break;
         }
-
-        // Set outline
-        _Outline.SetActive(true);
-
-        // Set other buttons Unselected
-        (_Question as RacketLayoutQuestionIcon).ClearOtherSelectedIcons(this);
-
-        // Send condition if any
-        (_Question as RacketLayoutQuestionIcon).OnAnsweringQuestion();
     }
 
     public void SetComponentsSize(float value)
@@ -76,6 +72,7 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         _Outline.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, 0);
         _SecondOutline.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, 0);
     }
+
     public void SetUnselected()
     {
         _Outline.SetActive(false);

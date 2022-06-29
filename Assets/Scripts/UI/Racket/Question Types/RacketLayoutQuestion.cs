@@ -22,8 +22,16 @@ public abstract class RacketLayoutQuestion : MonoBehaviour
     public abstract void UpdateData();
     public abstract void OnReset();
 
-    public void OnAnsweringQuestion()
+    public void ResetQuestion()
     {
+        _Answered = false;
+
+        OnReset();
+    }
+    public void SetAnswered()
+    {
+        _Answered = true;
+
         // If extra effect scripts are added to gameobject, they activate now
         if (_ExtraEffects != null)
         {
@@ -36,23 +44,16 @@ public abstract class RacketLayoutQuestion : MonoBehaviour
             }
         }
 
-        RefreshUi();
-
         _Controller.CheckIfAllQuestionsAreAnswered();
+
+        RefreshUi(); // Fixes some visual bugs
     }
 
-    public void ResetQuestion()
-    {
-        _Answered = false;
-
-        OnReset();
-    }
-    public void SetAnswered() => _Answered = true;
     public bool IsAnswered => _Answered;
 
     protected void RefreshUi()
     {
-        // Actualy works pretty well
+        // Actualy works pretty well 
         Canvas.ForceUpdateCanvases();
         GetComponent<VerticalLayoutGroup>().spacing += 0.001f;
         LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)transform);
@@ -62,16 +63,4 @@ public abstract class RacketLayoutQuestion : MonoBehaviour
         GetComponent<VerticalLayoutGroup>().spacing += 0.001f;
         Canvas.ForceUpdateCanvases();
     }
-    //[ContextMenu("Change Font Size")]
-    //void ChangeFontSize()
-    //{
-    //    if(transform.GetChild(0).GetComponent<TextMeshProUGUI>() != null)
-    //    {
-    //        transform.GetChild(0).GetComponent<TextMeshProUGUI>().enableAutoSizing = false;
-    //        transform.GetChild(0).GetComponent<TextMeshProUGUI>().fontSize = 23;
-    //        transform.GetChild(0).GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Bold;
-    //
-    //        transform.GetChild(0).GetComponent<TextMeshProUGUI>().verticalAlignment = VerticalAlignmentOptions.Bottom;
-    //    }
-    //}
 }

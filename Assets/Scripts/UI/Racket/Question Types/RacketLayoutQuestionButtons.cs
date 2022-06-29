@@ -18,30 +18,14 @@ public struct AnswerEvent
 
 public class RacketLayoutQuestionButtons : RacketLayoutQuestion
 {
-    //[SerializeField] private Condition _SelectedCondition = Condition.NoConditionSetYet;
-    //[SerializeField] private List<GameObject> _Choice1;
-    //[SerializeField] private List<GameObject> _Choice2;
-    //[SerializeField] private List<GameObject> _Choice3;
-    //[SerializeField] private List<GameObject> _Choice4;
-    //[SerializeField] private List<GameObject> _AlwaysClearOnClick;
-    private RacketLayoutChoiceButton[] _ChoiceButtons;
-
     private int _SelectedAnswer = 99;
+    private RacketLayoutChoiceButton[] _ChoiceButtons;
     [SerializeField] private AnswerEventGroup[] _AnswerEvents;
     [SerializeField] private AnswerEventGroup _OnInitializeEvent;
 
     private void Awake()
     {
         _ChoiceButtons = transform.Find("Options").GetComponentsInChildren<RacketLayoutChoiceButton>();
-    }
-
-    private void OnEnable()
-    {
-        if (!_Initialized)
-            return;
-
-        if (_Answered)
-            SetChoice(_SelectedAnswer);
     }
 
     public override void Initialize()
@@ -57,8 +41,6 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
             var aEvent = _OnInitializeEvent.events[i];
             aEvent.target.SetActive(aEvent.active);
         }
-
-        OnEnable();
     }
     public override void UpdateData()
     {
@@ -88,8 +70,6 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
             SetChoice(answer);
 
         _SelectedAnswer = answer;
-
-        OnAnsweringQuestion();
     }
     
     private void SetChoice(int answer)
@@ -105,4 +85,6 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
                 aEvent.target.SetActive(aEvent.active);
         }
     }
+
+    public int GetSelectedAnswer() => _SelectedAnswer;
 }

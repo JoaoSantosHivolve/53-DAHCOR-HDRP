@@ -1,20 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
-public enum Condition
-{
-    NoCondition,
-    ConditionOne,
-    ConditionTwo,
-    ConditionThree,
-    ConditionFour,
-    NoConditionSetYet
-}
 
 public abstract class RacketLayoutChoiceElement : MonoBehaviour
 {
-    [SerializeField] protected bool _SetAnswered = true;
+    //[SerializeField] protected bool _SetAnswered = true;
     protected bool _Initialized = false;
     protected RacketLayoutQuestion _Question;
 
