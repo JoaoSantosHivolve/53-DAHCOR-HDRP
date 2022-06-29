@@ -40,8 +40,6 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
         if (!_Initialized)
             return;
 
-        //if (!_Answered)
-           // ClearChoices();
         if (_Answered)
             SetChoice(_SelectedAnswer);
     }
@@ -61,8 +59,6 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
         }
 
         OnEnable();
-
-        //ClearChoices();
     }
     public override void UpdateData()
     {
@@ -93,11 +89,6 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
 
         _SelectedAnswer = answer;
 
-        // ClearChoices();
-
-        //if (_SelectedCondition != Condition.NoCondition)
-        //    SetChoice();
-
         OnAnsweringQuestion();
     }
     
@@ -113,27 +104,5 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
             if(aEvent.target != null)
                 aEvent.target.SetActive(aEvent.active);
         }
-
-        //switch (_SelectedCondition)
-        //{
-        //    case Condition.ConditionOne:
-        //        foreach (var item in _Choice1)
-        //            item.SetActive(true);
-        //        break;
-        //    case Condition.ConditionTwo:
-        //        foreach (var item in _Choice2)
-        //            item.SetActive(true);
-        //        break;
-        //    case Condition.ConditionThree:
-        //        foreach (var item in _Choice3)
-        //            item.SetActive(true);
-        //        break;
-        //    case Condition.ConditionFour:
-        //        foreach (var item in _Choice4)
-        //            item.SetActive(true);
-        //        break;
-        //    default:
-        //        break;
-        //}
     }
 }

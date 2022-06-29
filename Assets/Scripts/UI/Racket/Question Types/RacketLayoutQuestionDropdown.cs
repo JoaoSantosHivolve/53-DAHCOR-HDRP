@@ -14,10 +14,9 @@ public class RacketLayoutQuestionDropdown : RacketLayoutQuestion
     [SerializeField] DropdownDataTypeToLoad _DataToLoad = DropdownDataTypeToLoad.None;
     private RacketLayoutChoiceDropdown _Choice;
 
-
     private void Awake()
     {
-        _Choice  = transform.Find("Dropdown").GetComponentInChildren<RacketLayoutChoiceDropdown>();
+        _Choice  = transform.Find("Dropdown").GetComponent<RacketLayoutChoiceDropdown>();
 
         if (_Choice == null)
             Debug.LogError("Dropdown choice not found at: " + transform.name);

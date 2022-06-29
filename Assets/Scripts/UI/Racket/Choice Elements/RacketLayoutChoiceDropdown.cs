@@ -18,13 +18,13 @@ public class RacketLayoutChoiceDropdown : RacketLayoutChoiceElement
         item.GetChild(2).GetComponent<RectTransform>().offsetMin = new Vector2(25, 0); // new Vector2(left, bottom).offsetMax = new Vector2(25, 0); // new Vector2(right, top)
         item.GetChild(2).GetComponent<TextMeshProUGUI>().enableAutoSizing = false;
         item.GetChild(2).GetComponent<TextMeshProUGUI>().fontSize = 15;
+
+        _Question.SetAnswered();
     }
 
     private void OnValueChanged(int arg0)
     {
-        // Set question answered
-        if (_SetAnswered)
-            _Question.SetAnswered();
+        // DO Something
     }
 
     public TMP_Dropdown GetDropdown() => _Dropdown;

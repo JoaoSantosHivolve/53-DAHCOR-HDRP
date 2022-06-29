@@ -18,18 +18,6 @@ public abstract class RacketLayoutChoiceElement : MonoBehaviour
     protected bool _Initialized = false;
     protected RacketLayoutQuestion _Question;
 
-    //private void Awake()
-    //{
-    //    if (FindQuestion() && !_Initialized)
-    //    {
-    //        Initialize();
-    //
-    //        _Initialized = true;
-    //    }
-    //    else if (!FindQuestion())
-    //        Debug.Log("Question not found at " + this.name);
-    //}
-
     public void InitializeChoiceElement(RacketLayoutQuestion question)
     {
         _Question = question;
