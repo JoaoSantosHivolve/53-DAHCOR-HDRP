@@ -133,29 +133,29 @@ MonoBehaviour:
   m_AdvancedMode: 0
   rotation:
     m_OverrideState: 1
-    m_Value: 42
+    m_Value: 269
     min: 0
     max: 360
   skyIntensityMode:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: 2
   exposure:
     m_OverrideState: 1
-    m_Value: 13
+    m_Value: 16
   multiplier:
-    m_OverrideState: 0
-    m_Value: 1
+    m_OverrideState: 1
+    m_Value: 100000
     min: 0
   upperHemisphereLuxValue:
     m_OverrideState: 0
-    m_Value: 2.9392278
+    m_Value: 2.5535264
     min: 0
   upperHemisphereLuxColor:
     m_OverrideState: 0
-    m_Value: {x: 0.4959167, y: 0.5, z: 0.4959167}
+    m_Value: {x: 0.5, y: 0.48700103, z: 0.49021402}
   desiredLuxValue:
     m_OverrideState: 1
-    m_Value: 25000
+    m_Value: 23817.8
   updateMode:
     m_OverrideState: 0
     m_Value: 0
@@ -168,12 +168,12 @@ MonoBehaviour:
     m_Value: 0
   hdriSky:
     m_OverrideState: 1
-    m_Value: {fileID: 8900000, guid: 4927c5275a58da14f9177cabeecaeb31, type: 3}
+    m_Value: {fileID: 8900000, guid: 11c6453a80b92484c8b7404d97f27775, type: 3}
   enableDistortion:
     m_OverrideState: 0
     m_Value: 0
   procedural:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   flowmap:
     m_OverrideState: 0
@@ -396,31 +396,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 953beb541740ddc499d005ee80c9ff29, type: 3}
   m_Name: Fog
   m_EditorClassIdentifier: 
-  active: 1
+  active: 0
   m_AdvancedMode: 0
   quality:
     m_OverrideState: 1
     m_Value: 1
   enabled:
-    m_OverrideState: 1
-    m_Value: 1
+    m_OverrideState: 0
+    m_Value: 0
   colorMode:
     m_OverrideState: 1
     m_Value: 1
   color:
-    m_OverrideState: 0
-    m_Value: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+    m_OverrideState: 1
+    m_Value: {r: 1024, g: 1024, b: 1024, a: 1}
     hdr: 1
     showAlpha: 0
     showEyeDropper: 1
   tint:
     m_OverrideState: 1
-    m_Value: {r: 33.89676, g: 33.89676, b: 33.89676, a: 1}
+    m_Value: {r: 766.9961, g: 766.9961, b: 766.9961, a: 1}
     hdr: 1
     showAlpha: 0
     showEyeDropper: 1
   maxFogDistance:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 5011.1
     min: 0
   mipFogMaxMip:
@@ -437,20 +437,20 @@ MonoBehaviour:
     m_Value: 1000
     min: 0
   baseHeight:
-    m_OverrideState: 0
-    m_Value: 0
-  maximumHeight:
     m_OverrideState: 1
-    m_Value: 500
+    m_Value: 100
+  maximumHeight:
+    m_OverrideState: 0
+    m_Value: 6853.8
   meanFreePath:
     m_OverrideState: 1
-    m_Value: 2502
+    m_Value: 300
     min: 1
   enableVolumetricFog:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 1
   albedo:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: {r: 1, g: 1, b: 1, a: 1}
     hdr: 0
     showAlpha: 1
@@ -461,12 +461,12 @@ MonoBehaviour:
     min: 0
     max: 1
   depthExtent:
-    m_OverrideState: 0
-    m_Value: 50
+    m_OverrideState: 1
+    m_Value: 150
     min: 0.1
   denoisingMode:
     m_OverrideState: 0
-    m_Value: 3
+    m_Value: 0
   anisotropy:
     m_OverrideState: 0
     m_Value: 0
@@ -521,7 +521,7 @@ MonoBehaviour:
   active: 0
   m_AdvancedMode: 0
   screenFadeDistance:
-    m_OverrideState: 0
+    m_OverrideState: 1
     m_Value: 0.001
     min: 0.001
     max: 1
@@ -637,10 +637,10 @@ MonoBehaviour:
   m_AdvancedMode: 0
   mode:
     m_OverrideState: 1
-    m_Value: 4
+    m_Value: 3
   meteringMode:
-    m_OverrideState: 1
-    m_Value: 4
+    m_OverrideState: 0
+    m_Value: 0
   luminanceSource:
     m_OverrideState: 0
     m_Value: 1
@@ -649,13 +649,13 @@ MonoBehaviour:
     m_Value: 12
   compensation:
     m_OverrideState: 1
-    m_Value: 0
+    m_Value: -0.5
   limitMin:
     m_OverrideState: 1
-    m_Value: 5
+    m_Value: 2.3854456
   limitMax:
     m_OverrideState: 1
-    m_Value: 13
+    m_Value: 15.2
   curveMap:
     m_OverrideState: 0
     m_Value:
@@ -776,7 +776,7 @@ MonoBehaviour:
     m_Value: 30
   proceduralSoftness:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
     min: 0
 --- !u!114 &7589047628809543893
 MonoBehaviour:
@@ -794,7 +794,7 @@ MonoBehaviour:
   m_AdvancedMode: 0
   quality:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 3
   enabled:
     m_OverrideState: 1
     m_Value: 1
@@ -806,7 +806,7 @@ MonoBehaviour:
     m_Value: 0
   reflectSky:
     m_OverrideState: 1
-    m_Value: 1
+    m_Value: 0
   depthBufferThickness:
     m_OverrideState: 0
     m_Value: 0.01
@@ -814,7 +814,7 @@ MonoBehaviour:
     max: 1
   screenFadeDistance:
     m_OverrideState: 0
-    m_Value: 0.1
+    m_Value: 0
     min: 0
     max: 1
   accumulationFactor:
@@ -842,17 +842,17 @@ MonoBehaviour:
     max: 8
   m_MinSmoothness:
     m_OverrideState: 1
-    m_Value: 0.9
+    m_Value: 1
     min: 0
     max: 1
   m_SmoothnessFadeStart:
     m_OverrideState: 1
-    m_Value: 0.9
+    m_Value: 1
     min: 0
     max: 1
   m_RayMaxIterations:
     m_OverrideState: 1
-    m_Value: 64
+    m_Value: 256
   m_RayLength:
     m_OverrideState: 0
     m_Value: 50
@@ -894,7 +894,7 @@ MonoBehaviour:
   m_AdvancedMode: 0
   mode:
     m_OverrideState: 1
-    m_Value: 2
+    m_Value: 0
   toeStrength:
     m_OverrideState: 0
     m_Value: 0

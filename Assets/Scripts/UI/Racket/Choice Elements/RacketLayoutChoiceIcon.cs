@@ -19,6 +19,7 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
     private Mask _ImageMask;
     private GameObject _Outline;
     private GameObject _SecondOutline;
+    private Transform _OverlaysHolder;
     private TextMeshProUGUI _Name;
     private TextMeshProUGUI _Price;
     private ChoiceIconType _Type = ChoiceIconType.NotSet;
@@ -38,6 +39,9 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         _Name = transform.GetChild(2).GetComponent<TextMeshProUGUI>();
         _Price = transform.GetChild(3).GetComponent<TextMeshProUGUI>();
         _SecondOutline = transform.GetChild(4).gameObject;
+        _OverlaysHolder = transform.GetChild(5);
+
+        ClearFinishOverlay();
     }
     private void OnClick()
     {
@@ -54,10 +58,10 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         switch (_Type)
         {
             case ChoiceIconType.Color:
-                RacketMaterialController.Instance.ChangePart(_PartToModify, _DataColor);
+                RacketCostumizerController.Instance.ChangePart(_PartToModify, _DataColor);
                 break;
             case ChoiceIconType.Texture:
-                RacketMaterialController.Instance.ChangePart(_PartToModify, _DataTexture);
+                RacketCostumizerController.Instance.ChangePart(_PartToModify, _DataTexture);
                 break;
             default:
                 break;
@@ -71,6 +75,7 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         _ImageMask.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, 0);
         _Outline.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, 0);
         _SecondOutline.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, 0);
+        _OverlaysHolder.GetComponent<RectTransform>().sizeDelta = new Vector2(newWidth, 0);
     }
 
     public void SetUnselected()
@@ -99,7 +104,7 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
     private void SetComponentsData(string name, string price)
     {
         _Name.text = name;
-        _Price.text = "+" + price;
+        _Price.text = price != "" ? "+" + price : "";
     }
     private void SetComponentsData(string name, string price, Sprite image)
     {
@@ -121,6 +126,20 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         //var g = int.Parse(color.Substring(3, 3));
         //var b = int.Parse(color.Substring(6, 3));
         //var newColor = new Color(r / 255f, g / 255f, b / 255f);
+    }
+
+    public void AddFinishOverlay(PremadeFinish finish)
+    {
+        ClearFinishOverlay();
+
+        _OverlaysHolder.GetChild((int)finish).gameObject.SetActive(true);
+    }
+    private void ClearFinishOverlay()
+    {
+        for (int i = 0; i < _OverlaysHolder.childCount; i++)
+        {
+            _OverlaysHolder.GetChild(i).gameObject.SetActive(false);
+        }
     }
 
     [ContextMenu("Change Font Size")]

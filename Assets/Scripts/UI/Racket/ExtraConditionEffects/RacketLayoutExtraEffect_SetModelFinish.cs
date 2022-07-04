@@ -5,7 +5,9 @@ using UnityEngine;
 public class RacketLayoutExtraEffect_SetModelFinish : RacketLayoutExtraEffect
 {
     private RacketLayoutQuestionButtons _Question;
+    [SerializeField] private RacketLayoutQuestionIcon _QuestionIcon;
     [SerializeField] private PartToModify _PartToModify = PartToModify.None;
+
     private int AnswerIndex
     {
         get { return _Question.GetSelectedAnswer(); }
@@ -20,7 +22,8 @@ public class RacketLayoutExtraEffect_SetModelFinish : RacketLayoutExtraEffect
     {
         if(AnswerIndex >= 0 && AnswerIndex < 4)
         {
-            RacketMaterialController.Instance.SetFinish(_PartToModify, (PremadeFinish)_Question.GetSelectedAnswer());
+            RacketCostumizerController.Instance.SetFinish(_PartToModify, (PremadeFinish)_Question.GetSelectedAnswer());
+            _QuestionIcon.AddFinishOverlayToIcons((PremadeFinish)AnswerIndex);
         }
     }
 }

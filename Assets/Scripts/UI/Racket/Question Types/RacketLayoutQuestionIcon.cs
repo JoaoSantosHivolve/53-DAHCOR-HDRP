@@ -100,6 +100,15 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
             }
         }
     }
+
+    public void AddFinishOverlayToIcons(PremadeFinish finish)
+    {
+        foreach (var item in _Cells)
+        {
+            item.AddFinishOverlay(finish);
+        }
+    }
+
     public void ClearOtherSelectedIcons(RacketLayoutChoiceIcon icon)
     {
         foreach (RacketLayoutChoiceIcon item in _Cells)
@@ -108,7 +117,6 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
                 item.SetUnselected();
         }
     }
-
     private List<TextureData> GetCurrentTextureData()
     {
         switch (_DataTypeToLoad)
