@@ -23,30 +23,34 @@ public class DataLoader : Singleton<DataLoader>
     [SerializeField] private List<TextureData> _AllTexturesData;
     [Header("   DROPDOWN Data")]
     [SerializeField] private List<CountryFlagsData> _CountryFlagsData;
+    [Header("   PRICE Data")]
+    [SerializeField] private List<PriceData> _PriceData;
+    [SerializeField] private List<SpecificPriceData> _SpecificPriceData;
     [Header("   MODEL Data")]
     [SerializeField] private List<ModelData> _BodyData;
     [SerializeField] private List<ModelData> _HeadData;
     [SerializeField] private List<ModelData> _GripData;
     [SerializeField] private List<ModelData> _ButtcapData;
 
-    private bool _IsColorDataLoaded;
-
-    private bool _IsAllTextureDataLoaded;
-
-    private bool _IsWoodsTextureDataLoaded;
-    private bool _IsRocksTextureDataLoaded;
-    private bool _IsScifiTextureDataLoaded;
-    private bool _IsFabricsTextureDataLoaded;
-    private bool _IsOrganicTextureDataLoaded;
-    private bool _IsMilitaryTextureDataLoaded;
-    private bool _IsAnimalsTextureDataLoaded;
-    private bool _IsPreciousTextureDataLoaded;
-    private bool _IsCountryFlagDataLoaded;
-
     private string _ServerName;
     private string _UserName;
     private string _Password;
     private string _ScriptsPath;
+
+    private bool _IsColorDataLoaded;
+    private bool _IsAllTextureDataLoaded;
+    private bool _IsCountryFlagDataLoaded;
+    private bool _IsPriceDataLoaded;
+    private bool _IsSpecificPriceDataLoaded;
+
+    //private bool _IsWoodsTextureDataLoaded;
+    //private bool _IsRocksTextureDataLoaded;
+    //private bool _IsScifiTextureDataLoaded;
+    //private bool _IsFabricsTextureDataLoaded;
+    //private bool _IsOrganicTextureDataLoaded;
+    //private bool _IsMilitaryTextureDataLoaded;
+    //private bool _IsAnimalsTextureDataLoaded;
+    //private bool _IsPreciousTextureDataLoaded;
 
     private const int TEXTURE_SIZE = 256;
 
@@ -54,7 +58,9 @@ public class DataLoader : Singleton<DataLoader>
     private const string GET_TEXTURE_DATA_PHP = "GetTextureData.php";
     private const string GET_TEXTURE_DATA_COUNT_PHP = "GetTextureDataCount.php";
     private const string GET_TEXTURE_DATA_INDEX_PHP = "GetIndexTextureData.php";
-    private const string GET_COUNTRY_FLAGS_DATA = "GetCountryFlagData.php";
+    private const string GET_COUNTRY_FLAGS_DATA_PHP = "GetCountryFlagData.php";
+    private const string GET_PRICE_DATA_PHP = "GetPriceData.php";
+    private const string GET_SPECIFIC_PRICE_DATA_PHP = "GetSpecificPriceData.php";
 
     private const string WOOD_CATEGORY = "woods";
     private const string ROCKS_CATEGORY = "rocks";
@@ -75,7 +81,9 @@ public class DataLoader : Singleton<DataLoader>
         _Password = _UseLocalhost ? "" : "dahcor";
         _ScriptsPath = "//" + _ServerName + "/dahcor_backend/";
 
+        // - Color Data
         _ColorData = new List<ColorData>();
+        // -- Texture Data
         _AllTexturesData = new List<TextureData>();
         _WoodsData = new List<TextureData>();
         _RocksData = new List<TextureData>();
@@ -85,7 +93,11 @@ public class DataLoader : Singleton<DataLoader>
         _MilitaryData = new List<TextureData>();
         _AnimalsData = new List<TextureData>();
         _PreciousData = new List<TextureData>();
+        // --- Country Data
         _CountryFlagsData = new List<CountryFlagsData>();
+        // ---- Price
+        _PriceData = new List<PriceData>();
+        _SpecificPriceData = new List<SpecificPriceData>();
         //_BodyData = new List<ModelData>();
         //_HeadData = new List<ModelData>();
         //_ButtcapData = new List<ModelData>();
@@ -101,7 +113,7 @@ public class DataLoader : Singleton<DataLoader>
 
         // ----- COLOR DATA
         StartCoroutine(RequestColorData(_ScriptsPath + GET_COLOR_DATA_PHP, form));
-
+        // ----- GET ALL TEXTURE DATA
         StartCoroutine(RequestAllTextureData(_ScriptsPath + GET_TEXTURE_DATA_COUNT_PHP, form, _ScriptsPath + GET_TEXTURE_DATA_INDEX_PHP));
 
         // ----- IMMATERIALS
@@ -114,7 +126,10 @@ public class DataLoader : Singleton<DataLoader>
         //StartCoroutine(RequestTextureData(_ScriptsPath + GET_TEXTURE_DATA_PHP, form, ANIMALS_CATEGORY, _AnimalsData, verifier => _IsAnimalsTextureDataLoaded = verifier));
         //StartCoroutine(RequestTextureData(_ScriptsPath + GET_TEXTURE_DATA_PHP, form, PRECIOUS_CATEGORY, _PreciousData, verifier => _IsPreciousTextureDataLoaded = verifier));
         // ----- FLAG DATA
-        StartCoroutine(RequestCountryFlagData(_ScriptsPath + GET_COUNTRY_FLAGS_DATA, form, _CountryFlagsData, verifier => _IsCountryFlagDataLoaded = verifier));
+        StartCoroutine(RequestCountryFlagData(_ScriptsPath + GET_COUNTRY_FLAGS_DATA_PHP, form, _CountryFlagsData, verifier => _IsCountryFlagDataLoaded = verifier));
+        // ----- PRICE DATA
+        StartCoroutine(RequestPriceData(_ScriptsPath + GET_PRICE_DATA_PHP, form));
+        StartCoroutine(RequestSpecificPriceData(_ScriptsPath + GET_SPECIFIC_PRICE_DATA_PHP, form));
     }
 
     private IEnumerator RequestColorData(string uri, WWWForm form)
@@ -175,7 +190,6 @@ public class DataLoader : Singleton<DataLoader>
             }
         }
     }
-
     private IEnumerator RequestAllTextureData(string uri, WWWForm form, string getTexturaDataViaIdUri)
     {
         using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
@@ -400,6 +414,143 @@ public class DataLoader : Singleton<DataLoader>
             }
         }
     }
+    private IEnumerator RequestPriceData(string uri, WWWForm form)
+    {
+        Debug.Log("<color=yellow> Requesting Price Data...</color>");
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+        {
+            yield return webRequest.SendWebRequest();
+
+            string[] pages = uri.Split('/');
+            int page = pages.Length - 1;
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                    Debug.LogError("<color=red>" + pages[page] + ": Error [Connection Error]: " + webRequest.error + "</color>");
+                    _IsPriceDataLoaded = false;
+                    break;
+
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError("<color=red>" + pages[page] + ": Error [Data Processing Error]: " + webRequest.error + "</color>");
+                    _IsPriceDataLoaded = false;
+                    break;
+
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError("<color=red>" + pages[page] + ": Error [Protocol Error]: " + webRequest.error + "</color>");
+                    _IsPriceDataLoaded = false;
+                    break;
+                case UnityWebRequest.Result.Success:
+                    try
+                    {
+                        string[] splitScores = webRequest.downloadHandler.text.Trim().Split('\n');
+                        for (int i = 0; i < splitScores.Length; i++)
+                        {
+                            string[] temp = splitScores[i].Split(',');
+
+                            var data = new PriceData();
+                            data.category = PriceManager.Instance.GetPriceCategory(int.Parse(temp[0]));
+                            data.body_minimal = int.Parse(temp[1]);
+                            data.body_outline_offbeat = int.Parse(temp[2]);
+                            data.head_mono_break = int.Parse(temp[3]);
+                            data.head_deuce = int.Parse(temp[4]);
+                            data.bumper = int.Parse(temp[5]);
+                            data.handle = int.Parse(temp[6]);
+                            data.name = data.category.ToString();
+
+                            _PriceData.Add(data);
+                        }
+
+                        _IsPriceDataLoaded = true;
+
+                        Debug.Log("<color=green>SUCCESSFULL: Price Data Received from " + pages[page] + "!</color>");
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log("<color=red>ERROR adding price data! " + e.Message + "</color>");
+                    }
+
+                    if (AllDataIsLoaded())
+                        _LayoutController.SetupApp();
+
+                    break;
+            }
+        }
+    }
+    private IEnumerator RequestSpecificPriceData(string uri, WWWForm form)
+    {
+        Debug.Log("<color=yellow> Requesting Specific Price Data...</color>");
+
+        using (UnityWebRequest webRequest = UnityWebRequest.Post(uri, form))
+        {
+            yield return webRequest.SendWebRequest();
+
+            string[] pages = uri.Split('/');
+            int page = pages.Length - 1;
+
+            switch (webRequest.result)
+            {
+                case UnityWebRequest.Result.ConnectionError:
+                    Debug.LogError("<color=red>" + pages[page] + ": Error [Connection Error]: " + webRequest.error + "</color>");
+                    _IsSpecificPriceDataLoaded = false;
+                    break;
+
+                case UnityWebRequest.Result.DataProcessingError:
+                    Debug.LogError("<color=red>" + pages[page] + ": Error [Data Processing Error]: " + webRequest.error + "</color>");
+                    _IsSpecificPriceDataLoaded = false;
+                    break;
+
+                case UnityWebRequest.Result.ProtocolError:
+                    Debug.LogError("<color=red>" + pages[page] + ": Error [Protocol Error]: " + webRequest.error + "</color>");
+                    _IsSpecificPriceDataLoaded = false;
+                    break;
+                case UnityWebRequest.Result.Success:
+                    try
+                    {
+                        string[] splitScores = webRequest.downloadHandler.text.Trim().Split('\n');
+                        for (int i = 0; i < splitScores.Length; i++)
+                        {
+                            string[] temp = splitScores[i].Split(',');
+
+                            var data = new SpecificPriceData();
+                            data.body_minimal = int.Parse(temp[1]);
+                            data.body_outline = int.Parse(temp[2]);
+                            data.body_offbeat = int.Parse(temp[3]);
+                            data.head_no_costumization = int.Parse(temp[4]);
+                            data.head_mono = int.Parse(temp[5]);
+                            data.head_break = int.Parse(temp[6]);
+                            data.head_deuce = int.Parse(temp[7]);
+                            data.lettering_gloss = int.Parse(temp[8]);
+                            data.lettering_matte = int.Parse(temp[9]);
+                            data.lettering_metal = int.Parse(temp[10]);
+                            data.lettering_chrome = int.Parse(temp[11]);
+                            data.buttcap_standart = int.Parse(temp[12]);
+                            data.buttcap_pro = int.Parse(temp[13]);
+                            data.strings_no_costumization = int.Parse(temp[14]);
+                            data.strings_colormap = int.Parse(temp[15]);
+                            data.autograph_yes = int.Parse(temp[16]);
+
+
+                            _SpecificPriceData.Add(data);
+                        }
+
+                        _IsSpecificPriceDataLoaded = true;
+
+                        Debug.Log("<color=green>SUCCESSFULL: Specific Price Data Received from " + pages[page] + "!</color>");
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.Log("<color=red>ERROR adding specific price data! " + e.Message + "</color>");
+                    }
+
+                    if (AllDataIsLoaded())
+                        _LayoutController.SetupApp();
+
+                    break;
+            }
+        }
+    }
 
     public List<ColorData> GetColorData() => _ColorData;
     public List<TextureData> GetWoodData() => _WoodsData;
@@ -411,6 +562,8 @@ public class DataLoader : Singleton<DataLoader>
     public List<TextureData> GetAnimalsData() => _AnimalsData;
     public List<TextureData> GetPreciousData() => _PreciousData;
     public List<CountryFlagsData> GetCountryFlagData() => _CountryFlagsData;
+    public List<PriceData> GetPriceData() => _PriceData;
+    public List<SpecificPriceData> GetSpecificPriceData() => _SpecificPriceData;
     public List<ModelData> GetBodyData() => _BodyData;
     public List<ModelData> GetHeadData() => _HeadData;
     public List<ModelData> GetGripData() => _GripData;
@@ -454,12 +607,12 @@ public class DataLoader : Singleton<DataLoader>
     }
     private bool AllDataIsLoaded()
     {
-        // Colors Data
+        // - Colors Data
         if (!_IsColorDataLoaded)
             return false;
+        // -- Texture Data
         if (!_IsAllTextureDataLoaded)
             return false;
-        //// Textures Data
         //if (!_IsWoodsTextureDataLoaded)
         //    return false;
         //if (!_IsRocksTextureDataLoaded)
@@ -477,8 +630,14 @@ public class DataLoader : Singleton<DataLoader>
         //if (!_IsPreciousTextureDataLoaded)
         //    return false;
 
-        // Countries Data
+        // --- Countries Data
         if (!_IsCountryFlagDataLoaded)
+            return false;
+
+        // ---- Price Data
+        if (!_IsPriceDataLoaded)
+            return false;
+        if (!_IsSpecificPriceDataLoaded)
             return false;
 
         Debug.Log("<color=green> All Data Loaded Sucessfully! </color>");
@@ -529,4 +688,36 @@ public struct ModelData
     public string id;
     public int materialCount;
     public Mesh mesh;
+}
+[Serializable]
+public struct PriceData
+{
+    public string name;
+    public RacketPriceCategory category;
+    public int body_minimal;
+    public int body_outline_offbeat;
+    public int head_mono_break;
+    public int head_deuce;
+    public int bumper;
+    public int handle;
+}
+[Serializable]
+public struct SpecificPriceData
+{
+    public int body_minimal;
+    public int body_outline;
+    public int body_offbeat;
+    public int head_no_costumization;
+    public int head_mono;
+    public int head_break;
+    public int head_deuce;
+    public int lettering_gloss;
+    public int lettering_matte;
+    public int lettering_metal;
+    public int lettering_chrome;
+    public int buttcap_standart;
+    public int buttcap_pro;
+    public int strings_no_costumization;
+    public int strings_colormap;
+    public int autograph_yes;
 }

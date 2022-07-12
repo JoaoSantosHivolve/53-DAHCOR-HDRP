@@ -18,6 +18,9 @@ public struct AnswerEvent
 
 public class RacketLayoutQuestionButtons : RacketLayoutQuestion
 {
+    [SerializeField] private string _Answer;
+    [SerializeField] private int _Cost;
+
     private int _SelectedAnswer = 99;
     private RacketLayoutChoiceButton[] _ChoiceButtons;
     [SerializeField] private AnswerEventGroup[] _AnswerEvents;
@@ -71,7 +74,6 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
 
         _SelectedAnswer = answer;
     }
-
     public void ForceAnswer(int index)
     {
         if(_ChoiceButtons[index] == null)
@@ -81,6 +83,11 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
         }
 
         _ChoiceButtons[index].OnClick();
+    }
+    public void SetAnswerData(string answer, int cost)
+    {
+        _Answer = answer;
+        _Cost = cost;
     }
 
     private void SetChoice(int answer)

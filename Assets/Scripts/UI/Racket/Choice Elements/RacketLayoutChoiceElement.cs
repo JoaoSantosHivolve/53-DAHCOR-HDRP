@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 public abstract class RacketLayoutChoiceElement : MonoBehaviour
@@ -5,6 +6,18 @@ public abstract class RacketLayoutChoiceElement : MonoBehaviour
     //[SerializeField] protected bool _SetAnswered = true;
     protected bool _Initialized = false;
     protected RacketLayoutQuestion _Question;
+    private int _Price;
+    public int Price
+    {
+        get { return _Price; }
+        set
+        {
+            _Price = value;
+            if(_PriceText != null)
+                _PriceText.text = value == 0 ? "" : "+" + value;
+        }
+    }
+    [SerializeField] protected TextMeshProUGUI _PriceText;
 
     public void InitializeChoiceElement(RacketLayoutQuestion question)
     {

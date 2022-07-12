@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,12 +9,18 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
     private Color _UnselectedColor = new Color(213f/255f, 213f/255f, 213f/255f);
     private Button _Button;
     private Image _Image;
+   
         
     protected override void Initialize()
     {
         _Button = GetComponent<Button>();
         _Button.onClick.AddListener(OnClick);
         _Image = GetComponent<Image>();
+
+        if(transform.childCount > 1)
+        {
+            _PriceText = transform.GetChild(1).GetComponent<TextMeshProUGUI>();
+        }
     }
 
     public void OnClick()
@@ -29,6 +36,9 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
 
         // Set question answered
         _Question.SetAnswered();
+
+        var answerText = transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
+        (_Question as RacketLayoutQuestionButtons).SetAnswerData(answerText, Price);
     }
 
     public void SetIndex(int index) => _AnswerIndex = index;
@@ -37,8 +47,6 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
     {
         _Image.color = _UnselectedColor;
     }
-
-
 
     //[ContextMenu("Change Font Size")]
     //void ChangeFontSize()
