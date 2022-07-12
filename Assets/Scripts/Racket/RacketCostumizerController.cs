@@ -23,13 +23,19 @@ public enum PremadeFinish
 
 public class RacketCostumizerController : Singleton<RacketCostumizerController>
 {
-    [SerializeField]private Transform _Racket;
-    [SerializeField]private Transform _Body;
-    [SerializeField]private Transform _Head;
-    [SerializeField]private Transform _Bumper;
-    [SerializeField]private Transform _Strings;
-    [SerializeField]private Transform _Grip;
-    [SerializeField]private Transform _Buttcap;
+    private Transform _Racket;
+    private Transform _Body;
+    private Transform _Head;
+    private Transform _Bumper;
+    private Transform _Strings;
+    private Transform _Grip;
+    private Transform _Buttcap;
+
+    private Material _DefaultFrameMaterial;
+    private Material _DefaultHeadMaterial;
+    private Material _DefaultGripMaterial;
+    private Material _DefaultButtCapMaterial;
+    private Material _DefaultTapeMaterial;
 
     public override void Awake()
     {
@@ -38,34 +44,46 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
         _Racket = transform.GetChild(0).GetChild(0);
 
         _Body = _Racket.GetChild(1);
-        _Head = _Racket.GetChild(1);
+        _Head = _Racket.GetChild(2);
         _Bumper = _Racket.GetChild(0);
-        _Strings = _Racket.GetChild(2);
-        _Grip = _Racket.GetChild(3);
-        _Buttcap = _Grip.GetChild(0);
+        _Strings = _Racket.GetChild(3);
+        _Grip = _Racket.GetChild(4);
+        _Buttcap = _Racket.GetChild(5);
+
+        _DefaultFrameMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultFrameMat");
+        _DefaultHeadMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultHeadMat");
+        _DefaultGripMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultGripMat");
+        _DefaultButtCapMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultButtCapMat");
+        _DefaultTapeMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultTapeMat");
     }
 
     // ----- COLOR
-    public void ChangePart(PartToModify part, Color color)
+    public void ChangePart(PartToModify part, Color color, int index)
     {
         if (part == PartToModify.None)
             return;
 
         var renderer = GetPartRenderer(part);
-        renderer.material.color = color;
-        renderer.material.mainTexture = null;
+        renderer.materials[index].color = color;
+        renderer.materials[index].mainTexture = null;
     }
     // ----- TEXTURE
-    public void ChangePart(PartToModify part, Texture2D texture)
+    public void ChangePart(PartToModify part, TextureData textureData, int index)
     {
         if (part == PartToModify.None)
             return;
 
         var renderer = GetPartRenderer(part);
-        var material = GetPartMaterial(part);
-        renderer.material = new Material(material);
-        renderer.material.color = Color.white;
-        renderer.material.mainTexture = texture;
+        var material = GetDefaultMaterial(part);
+        renderer.materials[index] = new Material(material);
+        renderer.materials[index].color = Color.white;
+        renderer.materials[index].mainTexture = textureData.baseMap.texture;
+        renderer.materials[index].SetTexture("_MaskMap", textureData.maskMap.texture);
+        renderer.materials[index].SetTexture("_NormalMap", textureData.normalMap.texture);
+        renderer.materials[index].mainTextureScale = textureData.tiling;
+        //renderer.materials[index].SetTextureScale("_MainTex", textureData.tiling);
+        //renderer.materials[index].SetTextureScale("_MaskMap", textureData.tiling);
+        //renderer.materials[index].SetTextureScale("_NormalMap", textureData.tiling);
     }
     public void ChangePart(PartToModify part, Material material)
     {
@@ -73,52 +91,27 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
         renderer.material = new Material(material);
     }
     // ----- MODEL
-    public void ChangeObject(PartToModify part, GameObject obj)
+    public void ChangeObject(PartToModify part, ModelData data)
     {
-        GameObject currentObject;
+        // Change mesh
+        var meshFilter = GetPartMeshFilter(part);
+        meshFilter.mesh = data.mesh;
 
-        switch (part)
+        // Set default materials
+        var defaultMat = GetDefaultMaterial(part);
+        var newMats = new Material[data.materialCount];
+        if(part != PartToModify.Grip && part != PartToModify.Buttcap)
         {
-            case PartToModify.Body:
-                currentObject = _Head.gameObject; // NEED CHANGING
-                break;
-            case PartToModify.Head:
-                currentObject = _Head.gameObject; // NEED CHANGING
-                break;
-            case PartToModify.Buttcap:
-                currentObject = _Grip.gameObject;
-                break;
-            default:
-                Debug.Log("Not a valid choice");
-                return;
+            for (int i = 0; i < newMats.Length; i++)
+            {
+                newMats[i] = defaultMat;
+            }
+
+            var renderer = GetPartRenderer(part);
+            renderer.materials = newMats;
         }
-
-        // Set new Object
-        var newObject = Instantiate(obj, _Racket);
-        // UPDATE MATERIAL
-        ChangePart(part, new Material(currentObject.GetComponent<MeshRenderer>().material));
-
-        // Update transforms
-        switch (part)
-        {
-            case PartToModify.Body:
-                _Body = newObject.transform;
-                break;
-            case PartToModify.Head:
-                _Head = newObject.transform;
-                break;
-            case PartToModify.Grip:
-                _Grip = newObject.transform;
-                _Buttcap = _Grip.GetChild(0);
-                break;
-            default:
-                break;
-        }
-
-        // Delete old object
-        Destroy(currentObject);
     }
-
+    // ----- FINISH
     public void SetFinish(PartToModify part, PremadeFinish finish)
     {
         if (part == PartToModify.None)
@@ -152,9 +145,17 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
             return;
 
         var renderer = GetPartRenderer(part);
-        renderer.material.SetFloat("_Metallic", metallic);
-        renderer.material.SetFloat("_Smoothness", smoothness);
-        renderer.material.SetFloat("_CoatMask", applyCoat ? 1.0f : 0.0f);
+        for (int i = 0; i < renderer.materials.Length; i++)
+        {
+            renderer.materials[i].SetFloat("_Metallic", metallic);
+            renderer.materials[i].SetFloat("_Smoothness", smoothness);
+            renderer.materials[i].SetFloat("_CoatMask", applyCoat ? 1.0f : 0.0f);
+        }
+    }
+
+    public void SetDefaultMat(PartToModify part)
+    {
+        ChangePart(part, GetDefaultMaterial(part));
     }
 
     private MeshRenderer GetPartRenderer(PartToModify part)
@@ -179,14 +180,42 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
                 return null;
         }
     }
-    private Material GetPartMaterial(PartToModify part)
+    private MeshFilter GetPartMeshFilter(PartToModify part)
     {
         switch (part)
         {
             case PartToModify.None:
                 return null;
+            case PartToModify.Body:
+                return _Body.GetComponent<MeshFilter>();
+            case PartToModify.Head:
+                return _Head.GetComponent<MeshFilter>();
+            case PartToModify.Bumper:
+                return _Bumper.GetComponent<MeshFilter>();
+            case PartToModify.Strings:
+                return _Strings.GetComponent<MeshFilter>();
             case PartToModify.Grip:
-                return Resources.Load<Material>("Materials/Racket/GripMat");
+                return _Grip.GetComponent<MeshFilter>();
+            case PartToModify.Buttcap:
+                return _Buttcap.GetComponent<MeshFilter>();
+            default:
+                return null;
+        }
+    }
+    private Material GetDefaultMaterial(PartToModify part)
+    {
+        switch (part)
+        {
+            case PartToModify.None:
+                return null;
+            case PartToModify.Body:
+                return _DefaultFrameMaterial;
+            case PartToModify.Head:
+                return _DefaultHeadMaterial;
+            case PartToModify.Buttcap:
+                return _DefaultButtCapMaterial;
+            case PartToModify.Grip:
+                return _DefaultGripMaterial;
             default:
                 return Resources.Load<Material>("Materials/Racket/RacketMat");
         }

@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -26,7 +23,8 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
     private PartToModify _PartToModify = PartToModify.None;
     // Data
     private Color _DataColor;
-    private Texture2D _DataTexture;
+    private TextureData _DataTexture;
+    private int _PartIndex;
 
     protected override void Initialize()
     {
@@ -43,7 +41,7 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
 
         ClearFinishOverlay();
     }
-    private void OnClick()
+    public void OnClick()
     {
         // Set question answered
         _Question.SetAnswered();
@@ -58,10 +56,10 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         switch (_Type)
         {
             case ChoiceIconType.Color:
-                RacketCostumizerController.Instance.ChangePart(_PartToModify, _DataColor);
+                RacketCostumizerController.Instance.ChangePart(_PartToModify, _DataColor, _PartIndex);
                 break;
             case ChoiceIconType.Texture:
-                RacketCostumizerController.Instance.ChangePart(_PartToModify, _DataTexture);
+                RacketCostumizerController.Instance.ChangePart(_PartToModify, _DataTexture, _PartIndex);
                 break;
             default:
                 break;
@@ -83,7 +81,7 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         _Outline.SetActive(false);
     }
 
-    public void SetData(PartToModify partToModify, Color color)
+    public void SetData(int index, PartToModify partToModify, Color color)
     {
         SetComponentsData("", "", color);
 
@@ -91,14 +89,16 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
 
         _PartToModify = partToModify;
         _Type = ChoiceIconType.Color;
+        _PartIndex = index;
     }
-    public void SetData(PartToModify partToModify, string name, string price, Sprite image)
+    public void SetData(int index, PartToModify partToModify, TextureData data, string price)
     {
-        SetComponentsData(name, price, image);
+        SetComponentsData(data, price);
         SetUnselected();
 
         _PartToModify = partToModify;
         _Type = ChoiceIconType.Texture;
+        _PartIndex = index;
     }
 
     private void SetComponentsData(string name, string price)
@@ -106,12 +106,12 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
         _Name.text = name;
         _Price.text = price != "" ? "+" + price : "";
     }
-    private void SetComponentsData(string name, string price, Sprite image)
+    private void SetComponentsData(TextureData textureData, string price)
     {
-        SetComponentsData(name, price);
+        SetComponentsData(textureData.byoName, price);
 
-        _Image.sprite = image == null ? _Image.sprite : image;
-        _DataTexture = image.texture;
+        _Image.sprite = textureData.baseMap == null ? _Image.sprite : textureData.baseMap;
+        _DataTexture = textureData;
     }
     private void SetComponentsData(string name, string price, Color color)
     {
@@ -119,8 +119,6 @@ public class RacketLayoutChoiceIcon : RacketLayoutChoiceElement
 
         _Image.color = color;
         _DataColor = color;
-
-      
 
         //var r = int.Parse(color.Substring(0, 3));
         //var g = int.Parse(color.Substring(3, 3));

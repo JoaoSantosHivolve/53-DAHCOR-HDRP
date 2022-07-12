@@ -7,13 +7,21 @@ public enum DataTypeToLoad
 {
     NotSetYet,
     Colors,
-    Woods
+    Woods, 
+    Rocks,
+    Scifi,
+    Fabrics,
+    Organic,
+    Military,
+    Animals,
+    Precious
 }
 
 public class RacketLayoutQuestionIcon : RacketLayoutQuestion
 {
     [SerializeField] private DataTypeToLoad _DataTypeToLoad = DataTypeToLoad.NotSetYet;
     [SerializeField] private PartToModify _PartToModify = PartToModify.None;
+    [SerializeField] private int _PartIndex = 0;
 
     private GridLayoutGroup _GridLayoutGroup;
     private List<RacketLayoutChoiceIcon> _Cells;
@@ -77,7 +85,7 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
                 var currentColorData = colorData[i];
                 var cell = Instantiate(prefab.gameObject, parent).GetComponent<RacketLayoutChoiceIcon>();
                 cell.InitializeChoiceElement(this);
-                cell.SetData(_PartToModify, currentColorData.color);
+                cell.SetData(_PartIndex, _PartToModify, currentColorData.color);
                 cell.SetComponentsSize(_GridLayoutGroup.cellSize.y);
 
                 _Cells.Add(cell);
@@ -90,10 +98,9 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
 
             for (int i = 0; i < textureData.Count; i++)
             {
-                var currentTextureData = textureData[i];
                 var cell = Instantiate(prefab.gameObject, parent).GetComponent<RacketLayoutChoiceIcon>();
                 cell.InitializeChoiceElement(this);
-                cell.SetData(_PartToModify, currentTextureData.byoName, "0", currentTextureData.baseMap);
+                cell.SetData(_PartIndex, _PartToModify, textureData[i], "0");
                 cell.SetComponentsSize(_GridLayoutGroup.cellSize.y);
 
                 _Cells.Add(cell);
@@ -107,6 +114,15 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
         {
             item.AddFinishOverlay(finish);
         }
+    }
+
+    public void ForceAnswer(int index)
+    {
+        _Cells[index].OnClick();
+    }
+    public void HideCell(int index)
+    {
+        _Cells[index].gameObject.SetActive(false);
     }
 
     public void ClearOtherSelectedIcons(RacketLayoutChoiceIcon icon)
@@ -123,11 +139,26 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
         {
             case DataTypeToLoad.Woods:
                 return DataLoader.Instance.GetWoodData();
+            case DataTypeToLoad.Rocks:
+                return DataLoader.Instance.GetRocksData();
+            case DataTypeToLoad.Scifi:
+                return DataLoader.Instance.GetScifiData();
+            case DataTypeToLoad.Fabrics:
+                return DataLoader.Instance.GetFabricsData();
+            case DataTypeToLoad.Organic:
+                return DataLoader.Instance.GetOrganicData();
+            case DataTypeToLoad.Military:
+                return DataLoader.Instance.GetMilitaryData();
+            case DataTypeToLoad.Animals:
+                return DataLoader.Instance.GetAnimalsData();
+            case DataTypeToLoad.Precious:
+                return DataLoader.Instance.GetPreciousData();
             default:
                 return null;
         }
 
     }
+
     private void ClearGrid()
     {
         for (int i = 0; i < _GridLayoutGroup.transform.childCount; i++)

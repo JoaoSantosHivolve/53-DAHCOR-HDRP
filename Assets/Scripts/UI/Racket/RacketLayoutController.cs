@@ -7,7 +7,14 @@ public class RacketLayoutController : MonoBehaviour
     private RacketLayoutButton[] _Buttons;
     private RacketViewController _ViewController;
     private RacketLayoutQuestionController[] _QuestionsController;
+    private RacketLayoutExtraEffect[] _ExtraEffects;
     private Animator _Ui;
+
+    private bool _QuestionsInitialized;
+    private bool _ExtraEffectsInitialized;
+    private bool _QuestionsUpdated;
+    private bool _ExtraEffectsLateInitialized;
+
 
     private void Awake()
     {
@@ -15,10 +22,16 @@ public class RacketLayoutController : MonoBehaviour
         _Ui = GameObject.Find("Canvas - UI").GetComponent<Animator>();
         _ViewController = GameObject.Find("[Racket Controller]").GetComponent<RacketViewController>();
         _QuestionsController = GameObject.FindObjectsOfType<RacketLayoutQuestionController>();
+        _ExtraEffects = GameObject.FindObjectsOfType<RacketLayoutExtraEffect>();
     }
 
     private void Start()
     {
+        _QuestionsInitialized = false;
+        _ExtraEffectsInitialized = false;
+        _QuestionsUpdated = false;
+        _ExtraEffectsLateInitialized = false;
+
         // Set Button index
         for (int i = 0; i < _Buttons.Length; i++)
         {
@@ -51,36 +64,69 @@ public class RacketLayoutController : MonoBehaviour
     }
 
     public void SetupApp() => StartCoroutine(SetupComponents());
+
     private IEnumerator SetupComponents()
     {
-        yield return new WaitForSeconds(1f);
+        StartCoroutine(InitializeAllQuestions());
+        while (!_QuestionsInitialized)
+            yield return null;
 
-        InitializeAllQuestions();
+        StartCoroutine(InitializeAllExtraEffects());
+        while (!_ExtraEffectsInitialized)
+            yield return null;
 
-        yield return new WaitForSeconds(1f);
+        StartCoroutine(UpdateQuestionsData());
+        while (!_QuestionsUpdated)
+            yield return null;
 
-        UpdateQuestionsData();
+        StartCoroutine(InitializeAllExtraEffectsLate());
+        while (!_ExtraEffectsLateInitialized)
+            yield return null;
 
         _Ui.SetTrigger("StartFadeIn");
     }
-
-    private void InitializeAllQuestions()
+    private IEnumerator InitializeAllQuestions()
     {
         foreach (var item in _QuestionsController)
         {
             item.InitializeQuestions();
+            yield return null;
         }
 
+        _QuestionsInitialized = true;
         Debug.Log("<color=yellow> Questions Initialized</color>");
     }
+    private IEnumerator InitializeAllExtraEffects()
+    {
+        foreach (var item in _ExtraEffects)
+        {
+            item.Initialize();
+            yield return null;
+        }
 
-    public void UpdateQuestionsData()
+        _ExtraEffectsInitialized = true;
+        Debug.Log("<color=yellow> Extra Effects Initialized</color>");
+    }
+    private IEnumerator InitializeAllExtraEffectsLate()
+    {
+        foreach (var item in _ExtraEffects)
+        {
+            item.LateInitialize();
+            yield return null;
+        }
+
+        _ExtraEffectsLateInitialized = true;
+        Debug.Log("<color=yellow> Extra Effects Late Initialized</color>");
+    }
+    public IEnumerator UpdateQuestionsData()
     {
         foreach (var questionsController in _QuestionsController)
         {
             questionsController.UpdateData();
+            yield return null;
         }
 
+        _QuestionsUpdated = true;
         Debug.Log("<color=yellow> Questions Updated</color>");
     }
 }

@@ -16,7 +16,7 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
         _Image = GetComponent<Image>();
     }
 
-    private void OnClick()
+    public void OnClick()
     {
         // Change Button Outline Color
         _Image.color = _SelectedColor;
@@ -37,6 +37,8 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
     {
         _Image.color = _UnselectedColor;
     }
+
+
 
     //[ContextMenu("Change Font Size")]
     //void ChangeFontSize()

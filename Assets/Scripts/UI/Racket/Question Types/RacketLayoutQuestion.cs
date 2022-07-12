@@ -9,10 +9,10 @@ public abstract class RacketLayoutQuestion : MonoBehaviour
     private RacketLayoutExtraEffect[] _ExtraEffects;
     protected bool _Initialized = false;
 
-    public void BaseInitialize()
+    public void BaseInitialize(RacketLayoutQuestionController controller)
     {
         _Initialized = true;
-        _Controller = transform.parent.GetComponent<RacketLayoutQuestionController>();
+        _Controller = controller;
         _ExtraEffects = transform.GetComponents<RacketLayoutExtraEffect>();
 
         Initialize();

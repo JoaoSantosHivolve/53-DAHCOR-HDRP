@@ -11,6 +11,14 @@ public class RacketLayoutExtraEffect_ResetScrollbarToTheTop : RacketLayoutExtraE
     public RacketLayoutQuestionButtons targetQuestion;
     public Scrollbar scrollbar;
 
+    public override void Initialize()
+    {
+    }
+
+    public override void LateInitialize()
+    {
+    }
+
     public override void OnClickEffect()
     {
         //if(targetQuestion.GetCurrentCondition() == Condition.ConditionTwo)

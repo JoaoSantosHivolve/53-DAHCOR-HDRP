@@ -5,22 +5,30 @@ using UnityEngine.UI;
 
 public class RacketLayoutQuestionController : MonoBehaviour
 {
-    [SerializeField] private List<RacketLayoutQuestion> _Questions;
+    [SerializeField] private RacketLayoutQuestion[] _Questions;
     private VerticalLayoutGroup _LayoutGroup;
     public Scrollbar scrollbar;
     public RacketLayoutButton button;
 
     private void Awake()
     {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            if(transform.GetChild(i).GetComponent<RacketLayoutQuestion>() != null)
-            {
-                var question = transform.GetChild(i).GetComponent<RacketLayoutQuestion>();
+        _Questions = transform.GetComponentsInChildren<RacketLayoutQuestion>();
 
-                _Questions.Add(question);
-            }
-        }
+        //for (int i = 0; i < transform.childCount; i++)
+        //{
+        //    if(transform.GetChild(i).GetComponent<RacketLayoutQuestion>() != null)
+        //    {
+        //        var question = transform.GetChild(i).GetComponent<RacketLayoutQuestion>();
+        //
+        //        _Questions.Add(question);
+        //    }
+        //    else if(transform.GetChild(i).GetChild(0).GetComponent<RacketLayoutQuestion>() != null)
+        //    {
+        //        var question = transform.GetChild(i).GetChild(0).GetComponent<RacketLayoutQuestion>();
+        //
+        //        _Questions.Add(question);
+        //    }
+        //}
         _LayoutGroup = GetComponent<VerticalLayoutGroup>();
     }
 
@@ -28,7 +36,7 @@ public class RacketLayoutQuestionController : MonoBehaviour
     {
         foreach (var item in _Questions)
         {
-            if (item.gameObject.activeSelf)
+            if (item.gameObject.activeInHierarchy)
                 if (!item.IsAnswered)
                 {
                     button.SetUncomplete();
@@ -43,7 +51,7 @@ public class RacketLayoutQuestionController : MonoBehaviour
     {
         foreach (var item in _Questions)
         {
-            item.BaseInitialize();
+            item.BaseInitialize(this);
         }
     }
 

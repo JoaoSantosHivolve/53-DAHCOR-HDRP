@@ -71,7 +71,18 @@ public class RacketLayoutQuestionButtons : RacketLayoutQuestion
 
         _SelectedAnswer = answer;
     }
-    
+
+    public void ForceAnswer(int index)
+    {
+        if(_ChoiceButtons[index] == null)
+        {
+            Debug.Log("Index out of bounds");
+            return;
+        }
+
+        _ChoiceButtons[index].OnClick();
+    }
+
     private void SetChoice(int answer)
     {
         if (_AnswerEvents.Length <= answer)
