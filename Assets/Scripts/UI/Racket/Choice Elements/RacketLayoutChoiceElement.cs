@@ -14,10 +14,10 @@ public abstract class RacketLayoutChoiceElement : MonoBehaviour
         {
             _Price = value;
             if(_PriceText != null)
-                _PriceText.text = value == 0 ? "" : "+" + value;
+                _PriceText.text = value == 0 ? "" : "+$" + value;
         }
     }
-    [SerializeField] protected TextMeshProUGUI _PriceText;
+    protected TextMeshProUGUI _PriceText;
 
     public void InitializeChoiceElement(RacketLayoutQuestion question)
     {

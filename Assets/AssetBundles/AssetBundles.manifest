@@ -1,0 +1,37 @@
+ManifestFileVersion: 0
+CRC: 477176695
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: buttcap-standard
+      Dependencies: {}
+    Info_1:
+      Name: buttcap-pro
+      Dependencies: {}
+    Info_2:
+      Name: grip-pro
+      Dependencies: {}
+    Info_3:
+      Name: grip-standard
+      Dependencies: {}
+    Info_4:
+      Name: head-break
+      Dependencies: {}
+    Info_5:
+      Name: head-deuce
+      Dependencies: {}
+    Info_6:
+      Name: head-mono
+      Dependencies: {}
+    Info_7:
+      Name: head-no-costumization
+      Dependencies: {}
+    Info_8:
+      Name: body-minimal
+      Dependencies: {}
+    Info_9:
+      Name: body-offbeat
+      Dependencies: {}
+    Info_10:
+      Name: body-outline
+      Dependencies: {}

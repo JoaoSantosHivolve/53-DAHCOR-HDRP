@@ -34,11 +34,12 @@ public class RacketLayoutChoiceButton : RacketLayoutChoiceElement
         // Send condition if any
         (_Question as RacketLayoutQuestionButtons).OnSelectingChoice(_AnswerIndex);
 
+        // Set answer data
+        var answerText = transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
+        _Question.SetAnswerData(answerText, Price);
+
         // Set question answered
         _Question.SetAnswered();
-
-        var answerText = transform.GetChild(0).GetComponent<TextMeshProUGUI>().text;
-        (_Question as RacketLayoutQuestionButtons).SetAnswerData(answerText, Price);
     }
 
     public void SetIndex(int index) => _AnswerIndex = index;

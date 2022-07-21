@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum PartToModify
 {
@@ -30,12 +31,14 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
     private Transform _Strings;
     private Transform _Grip;
     private Transform _Buttcap;
+    private Transform _TextInscribe;
 
     private Material _DefaultFrameMaterial;
     private Material _DefaultHeadMaterial;
     private Material _DefaultGripMaterial;
     private Material _DefaultButtCapMaterial;
     private Material _DefaultTapeMaterial;
+    private Material _DefaultBumperMaterial;
 
     public override void Awake()
     {
@@ -49,12 +52,14 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
         _Strings = _Racket.GetChild(3);
         _Grip = _Racket.GetChild(4);
         _Buttcap = _Racket.GetChild(5);
+        _TextInscribe = _Racket.GetChild(6).GetChild(0);
 
         _DefaultFrameMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultFrameMat");
         _DefaultHeadMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultHeadMat");
         _DefaultGripMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultGripMat");
         _DefaultButtCapMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultButtCapMat");
         _DefaultTapeMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultTapeMat");
+        _DefaultBumperMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultBumperMat");
     }
 
     // ----- COLOR
@@ -64,8 +69,20 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
             return;
 
         var renderer = GetPartRenderer(part);
-        renderer.materials[index].color = color;
-        renderer.materials[index].mainTexture = null;
+        var material = GetDefaultMaterial(part);
+        var exampleMat = renderer.materials[index];
+        Material[] mats = renderer.materials;
+        mats[index] = new Material(material);
+        mats[index].SetFloat("_Metallic", exampleMat.GetFloat("_Metallic"));
+        mats[index].SetFloat("_Smoothness", exampleMat.GetFloat("_Smoothness"));
+        mats[index].color = color;
+        renderer.materials = mats;
+
+        ////renderer.materials[index] = new Material(Shader.Find("HDRP/Lit"));
+        //renderer.materials[index].color = color;
+        ////renderer.materials[index].mainTexture = null;
+        //renderer.materials[index].SetTexture("_MaskMap", null);
+        //renderer.materials[index].SetTexture("_NormalMap", null);
     }
     // ----- TEXTURE
     public void ChangePart(PartToModify part, TextureData textureData, int index)
@@ -74,21 +91,26 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
             return;
 
         var renderer = GetPartRenderer(part);
-        var material = GetDefaultMaterial(part);
-        renderer.materials[index] = new Material(material);
-        renderer.materials[index].color = Color.white;
-        renderer.materials[index].mainTexture = textureData.baseMap.texture;
-        renderer.materials[index].SetTexture("_MaskMap", textureData.maskMap.texture);
-        renderer.materials[index].SetTexture("_NormalMap", textureData.normalMap.texture);
-        renderer.materials[index].mainTextureScale = textureData.tiling;
+        Material[] mats = renderer.materials;
+#if PLATFORM_STANDALONE_WIN
+        mats[index] = new Material(Shader.Find("HDRP/Lit"));
+        mats[index].SetTexture("_MaskMap", textureData.maskMap.texture);
+#else
+        mats[index] = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+#endif
+        mats[index].color = Color.white;
+        mats[index].mainTexture = textureData.baseMap.texture;
+        mats[index].SetTexture("_NormalMap", textureData.normalMap.texture);
+        mats[index].mainTextureScale = textureData.tiling;
+        renderer.materials = mats;
         //renderer.materials[index].SetTextureScale("_MainTex", textureData.tiling);
         //renderer.materials[index].SetTextureScale("_MaskMap", textureData.tiling);
         //renderer.materials[index].SetTextureScale("_NormalMap", textureData.tiling);
     }
-    public void ChangePart(PartToModify part, Material material)
+    public void SetDefaultMat(PartToModify part)
     {
         var renderer = GetPartRenderer(part);
-        renderer.material = new Material(material);
+        renderer.material = new Material(GetDefaultMaterial(part));
     }
     // ----- MODEL
     public void ChangeObject(PartToModify part, ModelData data)
@@ -99,7 +121,7 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
 
         // Set default materials
         var defaultMat = GetDefaultMaterial(part);
-        var newMats = new Material[data.materialCount];
+        var newMats = new Material[data.material_count];
         if(part != PartToModify.Grip && part != PartToModify.Buttcap)
         {
             for (int i = 0; i < newMats.Length; i++)
@@ -152,10 +174,11 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
             renderer.materials[i].SetFloat("_CoatMask", applyCoat ? 1.0f : 0.0f);
         }
     }
-
-    public void SetDefaultMat(PartToModify part)
+    // ----- TEXT
+    public void ChangeText(TextPlacement placement, string answer)
     {
-        ChangePart(part, GetDefaultMaterial(part));
+        var textToChange = GetText(placement);
+        textToChange.text = answer;
     }
 
     private MeshRenderer GetPartRenderer(PartToModify part)
@@ -216,8 +239,28 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
                 return _DefaultButtCapMaterial;
             case PartToModify.Grip:
                 return _DefaultGripMaterial;
+            case PartToModify.Bumper:
+                return _DefaultBumperMaterial;
             default:
                 return Resources.Load<Material>("Materials/Racket/RacketMat");
         }
+    }
+    private Text GetText(TextPlacement placement)
+    {
+        Transform part = null;
+
+        switch (placement)
+        {
+            case TextPlacement.NotSetYet:
+                return null;
+            case TextPlacement.Inscribe:
+                part = _TextInscribe;
+                break;
+            default:
+                Debug.Log("No text component found");
+                return null;
+        }
+
+        return part.GetChild(1).GetChild(0).GetChild(0).GetComponent<Text>();
     }
 }

@@ -616,6 +616,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ab784b871cf987745851b230d4a73e50, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _PriceText: {fileID: 0}
+  index: 0
+  _DataColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &2602779958338787872
 GameObject:
   m_ObjectHideFlags: 0

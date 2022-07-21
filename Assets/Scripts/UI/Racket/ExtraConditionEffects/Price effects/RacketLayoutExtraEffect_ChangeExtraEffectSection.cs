@@ -13,6 +13,10 @@ public class RacketLayoutExtraEffect_ChangeExtraEffectSection : RacketLayoutExtr
     
     public RacketLayoutExtraEffectAddButtonPrices _ExtraEffect;
 
+    public List<RacketLayoutExtraEffect_AddIconPrices> _IconQuestions;
+    public List<RacketLayoutExtraEffect_SetDefaultColormap> _ChangeColormaps;
+    public RL_ExtraEffect_ChangeColorTitles _ColorTitles;
+
     public override void Initialize()
     {
         _Question = GetComponent<RacketLayoutQuestionButtons>();
@@ -29,31 +33,71 @@ public class RacketLayoutExtraEffect_ChangeExtraEffectSection : RacketLayoutExtr
         {
             if (AnswerIndex == 0)
             {
-                _ExtraEffect.section = RacketPriceSection.Body_Minimal;
+                if (_ExtraEffect != null) _ExtraEffect.section = RacketPriceSection.Body_Minimal;
+                foreach (var item in _IconQuestions)
+                {
+                    item.section = RacketPriceSection.Body_Minimal;
+                }
+                foreach (var item in _ChangeColormaps)
+                {
+                    item.section = RacketPriceSection.Body_Minimal;
+                }
+
+                if (_ColorTitles != null) _ColorTitles.section = RacketPriceSection.Body_Minimal;
             }
             else
             {
                 _ExtraEffect.section = RacketPriceSection.Body_Outline_OffBeat;
+                foreach (var item in _IconQuestions)
+                {
+                    item.section = RacketPriceSection.Body_Outline_OffBeat;
+                }
+                foreach (var item in _ChangeColormaps)
+                {
+                    item.section = RacketPriceSection.Body_Outline_OffBeat;
+                }
+
+                if (_ColorTitles != null) _ColorTitles.section = RacketPriceSection.Body_Outline_OffBeat;
             }
         }
         // head
-        else
+        else 
         {
             if(AnswerIndex == 0)
             {
-                _ExtraEffect.section = RacketPriceSection.NotSetYet;
+                if (_ExtraEffect != null) _ExtraEffect.section = RacketPriceSection.NotSetYet;
+                foreach (var item in _IconQuestions)
+                {
+                    item.section = RacketPriceSection.NotSetYet;
+                }
+                if (_ColorTitles != null) _ColorTitles.section = RacketPriceSection.NotSetYet;
             }
-            else if(AnswerIndex > 0 && AnswerIndex < 2)
+            else if(AnswerIndex == 1 || AnswerIndex == 3)
             {
-                _ExtraEffect.section = RacketPriceSection.Head_Mono_Break;
+                if (_ExtraEffect != null) _ExtraEffect.section = RacketPriceSection.Head_Mono_Break;
+                foreach (var item in _IconQuestions)
+                {
+                    item.section = RacketPriceSection.Head_Mono_Break;
+                }
+                if (_ColorTitles != null) _ColorTitles.section = RacketPriceSection.Head_Mono_Break;
             }
             else
             {
-                _ExtraEffect.section = RacketPriceSection.Head_Deuce;
+                if (_ExtraEffect != null) _ExtraEffect.section = RacketPriceSection.Head_Deuce;
+                foreach (var item in _IconQuestions)
+                {
+                    item.section = RacketPriceSection.Head_Deuce;
+                }
+                if (_ColorTitles != null) _ColorTitles.section = RacketPriceSection.Head_Deuce;
             }
         }
-        
-       
-        _ExtraEffect.UpdatePrices();
+
+
+        if (_ExtraEffect != null) _ExtraEffect.UpdatePrices();
+        foreach (var item in _IconQuestions)
+        {
+            item.UpdatePrices();
+        }
+        if (_ColorTitles != null) _ColorTitles.UpdateTitles();
     }
 }

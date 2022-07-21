@@ -32,7 +32,6 @@ public class RacketLayoutQuestionCheckmark : RacketLayoutQuestion
     }
 
 
-
     public void SetEffect(bool value)
     {
         foreach (var item in value ? _OnEffect.events : _OffEffect.events) 

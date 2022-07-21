@@ -14,6 +14,8 @@ public class RacketLayoutChoiceInputField : RacketLayoutChoiceElement
     {
         if(arg0 != "")
         {
+            _Question.SetAnswerData(_InputField.text, 0);
+
             _Question.SetAnswered();
         }
     }

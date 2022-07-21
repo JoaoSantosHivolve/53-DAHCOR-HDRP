@@ -1,0 +1,29 @@
+ManifestFileVersion: 0
+CRC: 3393813344
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 45833442ee02245e92ceb1df78d6aaf4
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f64856a3d606b613608cbf22df470c60
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Assets/RacketBundleAssets/Head - Break.fbx
+Dependencies: []

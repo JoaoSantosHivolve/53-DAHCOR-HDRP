@@ -7,7 +7,7 @@ public enum DataTypeToLoad
 {
     NotSetYet,
     Colors,
-    Woods, 
+    Woods,
     Rocks,
     Scifi,
     Fabrics,
@@ -22,13 +22,15 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
     [SerializeField] private DataTypeToLoad _DataTypeToLoad = DataTypeToLoad.NotSetYet;
     [SerializeField] private PartToModify _PartToModify = PartToModify.None;
     [SerializeField] private int _PartIndex = 0;
+    [HideInInspector] public int selectedIndex;
 
     private GridLayoutGroup _GridLayoutGroup;
     private List<RacketLayoutChoiceIcon> _Cells;
+    private int SPACING = 50;
 
     private void OnEnable()
     {
-        RefreshUi(); // Fixes visual bugs
+        //RefreshUi(); // Fixes visual bugs
     }
 
     public override void Initialize()
@@ -85,8 +87,19 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
                 var currentColorData = colorData[i];
                 var cell = Instantiate(prefab.gameObject, parent).GetComponent<RacketLayoutChoiceIcon>();
                 cell.InitializeChoiceElement(this);
-                cell.SetData(_PartIndex, _PartToModify, currentColorData.color);
+                cell.index = i;
                 cell.SetComponentsSize(_GridLayoutGroup.cellSize.y);
+
+                if (GetComponent<RacketLayoutExtraEffect_AddIconPrices>() != null)
+                {
+                    var section = GetComponent<RacketLayoutExtraEffect_AddIconPrices>().section;
+                    var price = PriceManager.Instance.GetPrice(section, RacketPriceCategory.Colormap);
+                    cell.SetData(_PartIndex, _PartToModify, currentColorData.color, price);
+                }
+                else
+                {
+                    cell.SetData(_PartIndex, _PartToModify, currentColorData.color, 0);
+                }
 
                 _Cells.Add(cell);
             }
@@ -100,14 +113,44 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
             {
                 var cell = Instantiate(prefab.gameObject, parent).GetComponent<RacketLayoutChoiceIcon>();
                 cell.InitializeChoiceElement(this);
-                cell.SetData(_PartIndex, _PartToModify, textureData[i], "0");
+                cell.index = i;
                 cell.SetComponentsSize(_GridLayoutGroup.cellSize.y);
+
+                if (GetComponent<RacketLayoutExtraEffect_AddIconPrices>() != null)
+                {
+                    var section = GetComponent<RacketLayoutExtraEffect_AddIconPrices>().section;
+
+                    if(dataToLoad == DataTypeToLoad.Precious)
+                    {
+                        var price = PriceManager.Instance.GetPrice(section, RacketPriceCategory.Precious, i);
+                        cell.SetData(_PartIndex, _PartToModify, textureData[i], price);
+                    }
+                    else
+                    {
+                        var price = PriceManager.Instance.GetPrice(_DataTypeToLoad, section);
+                        cell.SetData(_PartIndex, _PartToModify, textureData[i], price);
+                    }
+                }
+                else
+                {
+                    cell.SetData(_PartIndex, _PartToModify, textureData[i], 0);
+                }
 
                 _Cells.Add(cell);
             }
         }
+
+        (transform as RectTransform).sizeDelta = new Vector2(0,(_GridLayoutGroup.cellSize.y * ((_Cells.Count + 1) / 4)) + SPACING);
+        (transform.Find("Grid") as RectTransform).sizeDelta = new Vector2(0, (_GridLayoutGroup.cellSize.y * ((_Cells.Count + 1) / 4)) + SPACING);
     }
 
+    public void SetPrices(RacketPriceSection section)
+    {
+        foreach (var item in _Cells)
+        {
+            item.Price = PriceManager.Instance.GetPrice(_DataTypeToLoad, section);
+        }
+    }
     public void AddFinishOverlayToIcons(PremadeFinish finish)
     {
         foreach (var item in _Cells)
@@ -115,7 +158,6 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
             item.AddFinishOverlay(finish);
         }
     }
-
     public void ForceAnswer(int index)
     {
         _Cells[index].OnClick();
@@ -124,7 +166,10 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
     {
         _Cells[index].gameObject.SetActive(false);
     }
-
+    public Color GetSelectedColor()
+    {
+        return _Cells[selectedIndex]._DataColor;
+    }
     public void ClearOtherSelectedIcons(RacketLayoutChoiceIcon icon)
     {
         foreach (RacketLayoutChoiceIcon item in _Cells)
@@ -133,6 +178,7 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
                 item.SetUnselected();
         }
     }
+
     private List<TextureData> GetCurrentTextureData()
     {
         switch (_DataTypeToLoad)
@@ -158,7 +204,6 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
         }
 
     }
-
     private void ClearGrid()
     {
         for (int i = 0; i < _GridLayoutGroup.transform.childCount; i++)
@@ -168,5 +213,49 @@ public class RacketLayoutQuestionIcon : RacketLayoutQuestion
 
         // reset list
         _Cells = new List<RacketLayoutChoiceIcon>();
+    }
+    int GetRowCount(GridLayoutGroup glg)
+    {
+        var column = 0;
+        var row = 0;
+
+        if (glg.transform.childCount == 0)
+            return 0;
+
+        //Column and row are now 1
+        column = 1;
+        row = 1;
+
+        //Get the first child GameObject of the GridLayoutGroup
+        RectTransform firstChildObj = glg.transform.
+            GetChild(0).GetComponent<RectTransform>();
+
+        Vector2 firstChildPos = firstChildObj.anchoredPosition;
+        bool stopCountingRow = false;
+
+        //Loop through the rest of the child object
+        for (int i = 1; i < glg.transform.childCount; i++)
+        {
+            //Get the next child
+            RectTransform currentChildObj = glg.transform.
+           GetChild(i).GetComponent<RectTransform>();
+
+            Vector2 currentChildPos = currentChildObj.anchoredPosition;
+
+            //if first child.x == otherchild.x, it is a column, ele it's a row
+            if (firstChildPos.x == currentChildPos.x)
+            {
+                column++;
+                //Stop couting row once we find column
+                stopCountingRow = true;
+            }
+            else
+            {
+                if (!stopCountingRow)
+                    row++;
+            }
+        }
+
+        return row;
     }
 }

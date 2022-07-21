@@ -41,12 +41,12 @@ public enum RacketPriceCategory
     Metal,
     Chrome,
     Woods,
-    Fabrics,
     Rocks,
-    Military,
     Scifi,
-    Animals,
+    Fabrics,
     Organic,
+    Military,
+    Animals,
     Precious
 }
 
@@ -111,6 +111,11 @@ public class PriceManager : Singleton<PriceManager>
         var cell = _PriceData[(int)category + index];
         return GetPriceFromSection(cell, section);
     }
+    public int GetPrice(DataTypeToLoad dataToLoad, RacketPriceSection section)
+    {
+        var cell = _PriceData[GetIndexFromDataToLoad(dataToLoad)];
+        return GetPriceFromSection(cell, section);
+    }
     private int GetPriceFromSection(PriceData cell, RacketPriceSection section)
     {
         switch (section)
@@ -131,6 +136,32 @@ public class PriceManager : Singleton<PriceManager>
                 return cell.handle;
 
                 default: return 0;
+        }
+    }
+    private int GetIndexFromDataToLoad(DataTypeToLoad dataToLoad)
+    {
+        switch (dataToLoad)
+        {
+            case DataTypeToLoad.Colors:
+                return 0;
+            case DataTypeToLoad.Woods:
+                return 5;
+            case DataTypeToLoad.Rocks:
+                return 6;
+            case DataTypeToLoad.Scifi:
+                return 7;
+            case DataTypeToLoad.Fabrics:
+                return 8;
+            case DataTypeToLoad.Organic:
+                return 9;
+            case DataTypeToLoad.Military:
+                return 10;
+            case DataTypeToLoad.Animals:
+                return 11;
+            case DataTypeToLoad.Precious:
+                return 12;
+            default:
+                return 0;
         }
     }
 

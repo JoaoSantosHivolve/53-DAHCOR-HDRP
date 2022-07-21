@@ -16,4 +16,13 @@ public class WholeFontChanger : MonoBehaviour
             textComponent.font = newFont;
         }
     }
+    [ContextMenu("Change Words spacing")]
+    void ChangeFontSpacing()
+    {
+        var allTextComponents = GameObject.FindObjectsOfType<TextMeshProUGUI>();
+        foreach (var textComponent in allTextComponents)
+        {
+            textComponent.characterSpacing = -6f;
+        }
+    }
 }
