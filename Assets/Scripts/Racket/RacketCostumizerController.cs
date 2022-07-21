@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public enum PartToModify
 {
@@ -245,7 +243,7 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
                 return Resources.Load<Material>("Materials/Racket/RacketMat");
         }
     }
-    private Text GetText(TextPlacement placement)
+    private TextMeshProUGUI GetText(TextPlacement placement)
     {
         Transform part = null;
 
@@ -261,6 +259,6 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
                 return null;
         }
 
-        return part.GetChild(1).GetChild(0).GetChild(0).GetComponent<Text>();
+        return part.GetChild(1).GetChild(0).GetChild(0).GetComponent<TextMeshProUGUI>();
     }
 }

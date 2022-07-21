@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEditor;
 using UnityEditor.Rendering.HighDefinition;
 using UnityEngine;
@@ -8,8 +9,8 @@ using UnityEngine.UI;
 public enum TextPlacement
 {
     NotSetYet,
-    Inscribe
-
+    Inscribe,
+    OutsideLogo
 }
 
 
@@ -84,7 +85,7 @@ public class TextOnObjectManager : MonoBehaviour
         canvasRectTransform.anchoredPosition3D = new Vector3(0, 0, 3);
         canvasRectTransform.sizeDelta = Vector2.one;
 
-        var text = new GameObject("Text", typeof(RectTransform)).AddComponent<Text>();
+        var text = new GameObject("Text", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
         text.transform.SetParent(Canvas.transform, false);
         var textRectTransform = text.GetComponent<RectTransform>();
 
@@ -97,27 +98,25 @@ public class TextOnObjectManager : MonoBehaviour
                 textRectTransform.localPosition = new Vector3(0.5f, 1.4f, 0);
                 textRectTransform.sizeDelta = new Vector2(2500, 1);
                 break;
+            case TextPlacement.OutsideLogo:
+                text.text = "DAHCOR";
+                break;
             default:
                 break;
         }
 
-
-
-        text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-        text.fontStyle = FontStyle.Bold;
-        text.alignment = TextAnchor.MiddleCenter;
+        //text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
+        text.fontStyle = FontStyles.Bold;
+        text.alignment = TextAlignmentOptions.Center;
         text.color = Color.red;
         text.fontSize = 300;
 
-       
-
-        text.horizontalOverflow = HorizontalWrapMode.Wrap;
-        text.verticalOverflow = VerticalWrapMode.Overflow;
+        text.horizontalAlignment = HorizontalAlignmentOptions.Center;
+        text.verticalAlignment = VerticalAlignmentOptions.Middle;
 
         Canvas.gameObject.layer = LayerMask.NameToLayer(LayerToUse);
         text.gameObject.layer = LayerMask.NameToLayer(LayerToUse);
 
-        text.text = "DAHCOR";
 
         // 7. finally assign the material to the child object and hope everything works ;)
         innerObject.GetComponent<MeshRenderer>().material = textMaterial;
