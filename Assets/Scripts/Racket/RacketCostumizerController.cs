@@ -33,7 +33,6 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
     private Transform _Strings;
     private Transform _Grip;
     private Transform _Buttcap;
-
    
     private Transform _LogosHolder;
     private Transform _TextInscribe;
@@ -248,6 +247,10 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
     {
         var textToChange = GetText(placement);
         textToChange.text = answer;
+    }
+    public void AdjustTextSize(TextPlacement placement, bool bigger)
+    {
+        GetText(placement).fontSize += bigger ? 90f : -90f;
     }
 
     private MeshRenderer GetPartRenderer(PartToModify part)

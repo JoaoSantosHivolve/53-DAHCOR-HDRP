@@ -16,4 +16,11 @@ public class RacketLayoutChoiceInputField : RacketLayoutChoiceElement
 
         _Question.SetAnswered(arg0 != "");
     }
+
+    public void SetInputFieldText(string value)
+    {
+        _InputField.text = value;
+    }
+
+    public TMP_InputField GetInputField() => _InputField;
 }

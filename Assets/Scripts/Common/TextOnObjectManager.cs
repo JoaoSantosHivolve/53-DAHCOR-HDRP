@@ -111,7 +111,7 @@ public class TextOnObjectManager : MonoBehaviour
                 text.characterSpacing = -11.3f;
                 text.text = "";
                 textRectTransform.localScale = Vector3.one * 0.001f;
-                textRectTransform.localPosition = new Vector3(0.75f, -1.3f, 0);
+                textRectTransform.localPosition = new Vector3(0.775f, -1.3f, 0);
                 textRectTransform.localScale = new Vector3(0.00125f, 0.001f, 0.001f);
                 textRectTransform.sizeDelta = new Vector2(2500, 1);
                 break;

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class RacketLayoutQuestionInputField : RacketLayoutQuestion
@@ -18,5 +19,15 @@ public class RacketLayoutQuestionInputField : RacketLayoutQuestion
 
     public override void UpdateData()
     {
+    }
+
+    public void ChangeText(string value)
+    {
+        _InputField.SetInputFieldText(value);
+    }
+
+    public TMP_InputField GetInputField()
+    {
+        return _InputField.GetInputField();
     }
 }
