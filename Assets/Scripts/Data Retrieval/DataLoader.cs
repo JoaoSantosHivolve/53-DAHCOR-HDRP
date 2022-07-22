@@ -320,7 +320,31 @@ public class DataLoader : Singleton<DataLoader>
 
                     var countryFlagData = new CountryFlagsData();
                     countryFlagData.name = temp[0];
-                    countryFlagData.image = temp[1];
+                    countryFlagData.flag_directory = temp[1];
+                    if(countryFlagData.flag_directory != "")
+                    {
+                        using UnityWebRequest flagRequest = new UnityWebRequest(countryFlagData.flag_directory, UnityWebRequest.kHttpVerbGET);
+#if UNITY_WEBGL
+        webRequest.SetRequestHeader("Access-Control-Allow-Credentials", "true");
+        webRequest.SetRequestHeader("Access-Control-Allow-Headers", "x-requested-with, Content-Type, origin, authorization, Accepts, accept, client-security-token, access-control-allow-headers");
+        webRequest.SetRequestHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+        webRequest.SetRequestHeader("Access-Control-Allow-Origin", "*");
+#endif
+                        flagRequest.downloadHandler = new DownloadHandlerTexture();
+                        yield return flagRequest.SendWebRequest();
+
+                        switch (flagRequest.result)
+                        {
+                            case UnityWebRequest.Result.Success:
+                                var texture = DownloadHandlerTexture.GetContent(flagRequest);
+                                countryFlagData.flag = Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.5f, 0.5f), 100f);
+                                break;
+                            default:
+                                Debug.LogError("<color=red>: Error [Protocol Error] : Downloading " + countryFlagData.flag_directory + " data : " + flagRequest.error + "</color>");
+                                break;
+                        }
+                    }
+
 
                     data.Add(countryFlagData);
                 }
@@ -330,6 +354,7 @@ public class DataLoader : Singleton<DataLoader>
 
                 if (AllDataIsLoaded())
                     _LayoutController.SetupApp();
+
                 break;
 
             default:
@@ -641,7 +666,8 @@ public class TextureData
 public struct CountryFlagsData
 {
     public string name;
-    public string image;
+    public string flag_directory;
+    public Sprite flag;
 }
 [Serializable]
 public struct PriceData

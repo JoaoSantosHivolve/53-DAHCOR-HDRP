@@ -12,11 +12,8 @@ public class RacketLayoutChoiceInputField : RacketLayoutChoiceElement
 
     private void OnValueChanged(string arg0)
     {
-        if(arg0 != "")
-        {
-            _Question.SetAnswerData(_InputField.text, 0);
+        _Question.SetAnswerData(arg0, 0);
 
-            _Question.SetAnswered();
-        }
+        _Question.SetAnswered(arg0 != "");
     }
 }

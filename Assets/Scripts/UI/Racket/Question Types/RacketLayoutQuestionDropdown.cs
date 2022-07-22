@@ -45,15 +45,15 @@ public class RacketLayoutQuestionDropdown : RacketLayoutQuestion
 
             foreach (var item in data)
             {
-                var flagString = item.image;
-                var flagData = System.Convert.FromBase64String(flagString);
-                var texture = new Texture2D(128, 128);
-                texture.LoadImage(flagData);
-                var flagSprite = Sprite.Create(texture,
-                        new Rect(0.0f, 0.0f, texture.width, texture.height),
-                        new Vector2(0.5f, 0.5f), 100.0f);
-
-                var itemData = new TMP_Dropdown.OptionData(item.name, flagSprite);
+//var flagString = item.image;
+//var flagData = System.Convert.FromBase64String(flagString);
+//var texture = new Texture2D(128, 128);
+//texture.LoadImage(flagData);
+//var flagSprite = Sprite.Create(texture,
+//        new Rect(0.0f, 0.0f, texture.width, texture.height),
+//        new Vector2(0.5f, 0.5f), 100.0f);
+//
+                var itemData = new TMP_Dropdown.OptionData(item.name, item.flag);
                 list.Add(itemData);
             }
 

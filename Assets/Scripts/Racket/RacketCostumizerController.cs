@@ -1,5 +1,8 @@
+using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum PartToModify
 {
@@ -9,7 +12,8 @@ public enum PartToModify
     Bumper,
     Strings,
     Grip,
-    Buttcap
+    Buttcap,
+    TextsAndLogos
 }
 
 public enum PremadeFinish
@@ -29,7 +33,13 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
     private Transform _Strings;
     private Transform _Grip;
     private Transform _Buttcap;
+
+   
+    private Transform _LogosHolder;
     private Transform _TextInscribe;
+    private Transform _TextOutsideLogo;
+    private Transform _TextPhygitallyMade;
+    private Transform _TextAutograph;
 
     private Material _DefaultFrameMaterial;
     private Material _DefaultHeadMaterial;
@@ -37,6 +47,8 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
     private Material _DefaultButtCapMaterial;
     private Material _DefaultTapeMaterial;
     private Material _DefaultBumperMaterial;
+    private Material _DefaultStringMaterial;
+    private Material _DefaultLogoMaterial;
 
     public override void Awake()
     {
@@ -50,7 +62,11 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
         _Strings = _Racket.GetChild(3);
         _Grip = _Racket.GetChild(4);
         _Buttcap = _Racket.GetChild(5);
-        _TextInscribe = _Racket.GetChild(6).GetChild(0);
+        _LogosHolder = _Racket.GetChild(6).GetChild(0);
+        _TextInscribe = _Racket.GetChild(6).GetChild(1);
+        _TextOutsideLogo = _Racket.GetChild(6).GetChild(2);
+        _TextPhygitallyMade = _Racket.GetChild(6).GetChild(3);
+        _TextAutograph = _Racket.GetChild(6).GetChild(4);
 
         _DefaultFrameMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultFrameMat");
         _DefaultHeadMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultHeadMat");
@@ -58,6 +74,8 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
         _DefaultButtCapMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultButtCapMat");
         _DefaultTapeMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultTapeMat");
         _DefaultBumperMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultBumperMat");
+        _DefaultStringMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultStringMat");
+        _DefaultLogoMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultLogoMat");
     }
 
     // ----- COLOR
@@ -65,17 +83,38 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
     {
         if (part == PartToModify.None)
             return;
+        if(part != PartToModify.TextsAndLogos)
+        {
+            var renderer = GetPartRenderer(part);
+            var material = GetDefaultMaterial(part);
+            var exampleMat = renderer.materials[index];
+            Material[] mats = renderer.materials;
+            mats[index] = new Material(material);
+            mats[index].SetFloat("_Metallic", exampleMat.GetFloat("_Metallic"));
+            mats[index].SetFloat("_Smoothness", exampleMat.GetFloat("_Smoothness"));
+            mats[index].color = color;
+            renderer.materials = mats;
+        }
+        // CHANGE TEXTS AND LOGOS
+        else
+        {
+            var texts = new List<TextMeshProUGUI>();
+            texts.Add(GetText(TextPlacement.Inscribe));
+            texts.Add(GetText(TextPlacement.OutsideLogo));
+            texts.Add(GetText(TextPlacement.PhygitallyMade));
+            texts.Add(GetText(TextPlacement.Autograph));
 
-        var renderer = GetPartRenderer(part);
-        var material = GetDefaultMaterial(part);
-        var exampleMat = renderer.materials[index];
-        Material[] mats = renderer.materials;
-        mats[index] = new Material(material);
-        mats[index].SetFloat("_Metallic", exampleMat.GetFloat("_Metallic"));
-        mats[index].SetFloat("_Smoothness", exampleMat.GetFloat("_Smoothness"));
-        mats[index].color = color;
-        renderer.materials = mats;
+            foreach (var item in texts)
+            {
+                item.color = color;
+            }
 
+            for (int i = 0; i < _LogosHolder.childCount; i++)
+            {
+                if(i != 3)
+                    _LogosHolder.GetChild(i).GetComponent<MeshRenderer>().material.color = color;
+            }
+        }
         ////renderer.materials[index] = new Material(Shader.Find("HDRP/Lit"));
         //renderer.materials[index].color = color;
         ////renderer.materials[index].mainTexture = null;
@@ -164,14 +203,46 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
         if (part == PartToModify.None)
             return;
 
-        var renderer = GetPartRenderer(part);
-        for (int i = 0; i < renderer.materials.Length; i++)
+        if(part != PartToModify.TextsAndLogos)
         {
-            renderer.materials[i].SetFloat("_Metallic", metallic);
-            renderer.materials[i].SetFloat("_Smoothness", smoothness);
-            renderer.materials[i].SetFloat("_CoatMask", applyCoat ? 1.0f : 0.0f);
+            var renderer = GetPartRenderer(part);
+            for (int i = 0; i < renderer.materials.Length; i++)
+            {
+                renderer.materials[i].SetFloat("_Metallic", metallic);
+                renderer.materials[i].SetFloat("_Smoothness", smoothness);
+                renderer.materials[i].SetFloat("_CoatMask", applyCoat ? 1.0f : 0.0f);
+            }
+        }
+        else
+        {
+            var textMaterials = new List<MeshRenderer>();
+            textMaterials.Add(_TextInscribe.GetChild(0).GetComponent<MeshRenderer>());
+            textMaterials.Add(_TextOutsideLogo.GetChild(0).GetComponent<MeshRenderer>());
+            textMaterials.Add(_TextPhygitallyMade.GetChild(0).GetComponent<MeshRenderer>());
+            textMaterials.Add(_TextAutograph.GetChild(0).GetComponent<MeshRenderer>());
+
+            for (int i = 0; i < _LogosHolder.childCount; i++)
+            {
+                textMaterials.Add(_LogosHolder.GetChild(i).GetComponent<MeshRenderer>());
+            } 
+
+            foreach (var item in textMaterials)
+            {
+                item.material.SetFloat("_Metallic", metallic);
+                item.material.SetFloat("_Smoothness", smoothness);
+                item.material.SetFloat("_CoatMask", applyCoat ? 1.0f : 0.0f);
+            }
         }
     }
+    // ----- COUNTRY FLAGS
+    public void ChangeFlag(CountryFlagsData item)
+    {
+        if (item.flag != null)
+            _LogosHolder.GetChild(3).GetComponent<MeshRenderer>().material.mainTexture = item.flag.texture;
+        else
+            _LogosHolder.GetChild(3).GetComponent<MeshRenderer>().material.mainTexture = null;
+    }
+
     // ----- TEXT
     public void ChangeText(TextPlacement placement, string answer)
     {
@@ -239,6 +310,10 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
                 return _DefaultGripMaterial;
             case PartToModify.Bumper:
                 return _DefaultBumperMaterial;
+            case PartToModify.Strings:
+                return _DefaultStringMaterial;
+            case PartToModify.TextsAndLogos:
+                return _DefaultLogoMaterial;
             default:
                 return Resources.Load<Material>("Materials/Racket/RacketMat");
         }
@@ -253,6 +328,15 @@ public class RacketCostumizerController : Singleton<RacketCostumizerController>
                 return null;
             case TextPlacement.Inscribe:
                 part = _TextInscribe;
+                break;
+            case TextPlacement.OutsideLogo:
+                part = _TextOutsideLogo;
+                break;
+            case TextPlacement.PhygitallyMade:
+                part = _TextPhygitallyMade;
+                break;
+            case TextPlacement.Autograph:
+                part = _TextAutograph;
                 break;
             default:
                 Debug.Log("No text component found");

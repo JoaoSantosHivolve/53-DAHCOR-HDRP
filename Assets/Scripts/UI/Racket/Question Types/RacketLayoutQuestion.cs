@@ -35,6 +35,16 @@ public abstract class RacketLayoutQuestion : MonoBehaviour
     {
         _Answered = true;
 
+        AnsweredBehaviour();
+    }
+    public void SetAnswered(bool state)
+    {
+        _Answered = state;
+
+        AnsweredBehaviour();
+    }
+    private void AnsweredBehaviour()
+    {
         // If extra effect scripts are added to gameobject, they activate now
         if (_ExtraEffects != null)
         {
@@ -53,6 +63,7 @@ public abstract class RacketLayoutQuestion : MonoBehaviour
 
         RefreshUi(); // Fixes some visual bugs
     }
+
     public bool IsAnswered => _Answered;
 
     public int GetCost() => _Cost;

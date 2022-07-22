@@ -10,7 +10,9 @@ public enum TextPlacement
 {
     NotSetYet,
     Inscribe,
-    OutsideLogo
+    OutsideLogo,
+    PhygitallyMade,
+    Autograph
 }
 
 
@@ -21,6 +23,11 @@ public class TextOnObjectManager : MonoBehaviour
     [SerializeField] private TextPlacement _Placement;
     [SerializeField] private Camera mainCamera;
     [SerializeField] private string LayerToUse;
+
+    private const string LOGO_FONT = "Syncopate-Bold SDF";
+    private const string INSCRIBE_FONT = "Syncopate-Bold SDF";
+    private const string HANDMADE_FONT = "Montserrat-Regular SDF";
+    private const string AUTOGRAPH_FONT = "Holimount SDF";
 
     private void Awake()
     {
@@ -38,7 +45,8 @@ public class TextOnObjectManager : MonoBehaviour
         var renderTexture = new RenderTexture(2048, 2048, 24) { name = name + "_RenderTexture" };
 
         // 2. Create material
-        var textMaterial = new Material(Shader.Find("HDRP/Lit"));
+        var textMaterial = Resources.Load<Material>("Materials/Racket/Default/DefaultTextMat");
+        //var textMaterial = new Material(Shader.Find("HDRP/Lit"));
 
         // assign the new renderTexture as Albedo
         textMaterial.mainTexture = renderTexture;
@@ -85,6 +93,7 @@ public class TextOnObjectManager : MonoBehaviour
         canvasRectTransform.anchoredPosition3D = new Vector3(0, 0, 3);
         canvasRectTransform.sizeDelta = Vector2.one;
 
+        //var text = new GameObject("Text", typeof(RectTransform)).AddComponent<Text>();
         var text = new GameObject("Text", typeof(RectTransform)).AddComponent<TextMeshProUGUI>();
         text.transform.SetParent(Canvas.transform, false);
         var textRectTransform = text.GetComponent<RectTransform>();
@@ -93,30 +102,68 @@ public class TextOnObjectManager : MonoBehaviour
         {
             case TextPlacement.NotSetYet:
                 break;
+
             case TextPlacement.Inscribe:
+                text.font = Resources.Load<TMP_FontAsset>("/Fonts/" + INSCRIBE_FONT);
+                text.fontStyle = FontStyles.UpperCase | FontStyles.Bold;
+                //text.fontSize = 170;
+                text.fontSize = 290;
+                text.characterSpacing = -11.3f;
+                text.text = "";
                 textRectTransform.localScale = Vector3.one * 0.001f;
-                textRectTransform.localPosition = new Vector3(0.5f, 1.4f, 0);
+                textRectTransform.localPosition = new Vector3(0.75f, -1.3f, 0);
+                textRectTransform.localScale = new Vector3(0.00125f, 0.001f, 0.001f);
                 textRectTransform.sizeDelta = new Vector2(2500, 1);
                 break;
+
             case TextPlacement.OutsideLogo:
+                text.fontStyle = FontStyles.UpperCase | FontStyles.Bold;
+                text.font = Resources.Load<TMP_FontAsset>("Fonts/" + LOGO_FONT);
                 text.text = "DAHCOR";
+                text.fontSize = 290;
+                text.characterSpacing = -11.3f;
+                textRectTransform.localScale = new Vector3(0.00125f, 0.0013f, 0.001f);
+                textRectTransform.localPosition = new Vector3(0.5f, 1.37f, 0);
+                textRectTransform.sizeDelta = new Vector2(2500, 1);
+                break;
+
+            case TextPlacement.PhygitallyMade:
+                text.font = Resources.Load<TMP_FontAsset>("Fonts/" + HANDMADE_FONT);
+                text.text = "PHYGITALLY MADE IN PORTUGAL";
+                text.fontStyle = FontStyles.UpperCase | FontStyles.Bold;
+                text.fontSize = 120;
+                text.characterSpacing = -8f;
+                textRectTransform.localPosition = new Vector3(0, -0.05f, 0);
+                textRectTransform.localScale = new Vector3(0.0015f, 0.002f, 0.001f);
+                textRectTransform.sizeDelta = new Vector2(3250, 1);
+                break;
+
+
+            case TextPlacement.Autograph:
+                text.font = Resources.Load<TMP_FontAsset>("Fonts/" + AUTOGRAPH_FONT);
+                text.text = "";
+                //text.fontStyle = FontStyles.Subscript;
+                text.characterSpacing = -4f;
+                text.fontSize = 800;
+                textRectTransform.localPosition = new Vector3(0.2f, -0.05f, 0);
+                textRectTransform.localScale = new Vector3(0.001f, 0.00075f, 0.001f);
+                textRectTransform.sizeDelta = new Vector2(6000, 1);
                 break;
             default:
                 break;
         }
 
-        //text.font = Resources.GetBuiltinResource<Font>("Arial.ttf");
-        text.fontStyle = FontStyles.Bold;
-        text.alignment = TextAlignmentOptions.Center;
-        text.color = Color.red;
-        text.fontSize = 300;
-
+        //text.alignment = TextAnchor.MiddleCenter;
+        text.color = Color.white;
+        
+        text.isOrthographic = true;
         text.horizontalAlignment = HorizontalAlignmentOptions.Center;
         text.verticalAlignment = VerticalAlignmentOptions.Middle;
+        //text.horizontalOverflow = HorizontalWrapMode.Wrap;
+        //text.verticalOverflow = VerticalWrapMode.Overflow;
 
         Canvas.gameObject.layer = LayerMask.NameToLayer(LayerToUse);
         text.gameObject.layer = LayerMask.NameToLayer(LayerToUse);
-
 
         // 7. finally assign the material to the child object and hope everything works ;)
         innerObject.GetComponent<MeshRenderer>().material = textMaterial;

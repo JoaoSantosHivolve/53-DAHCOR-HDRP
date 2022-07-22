@@ -24,7 +24,11 @@ public class RacketLayoutChoiceDropdown : RacketLayoutChoiceElement
 
     private void OnValueChanged(int arg0)
     {
-        // DO Something
+        var answerText = _Dropdown.options[arg0].text;
+        _Question.SetAnswerData(answerText, Price);
+        
+        // Set question answered -- first option doesnt count as answered
+        _Question.SetAnswered(arg0 != 0);
     }
 
     public TMP_Dropdown GetDropdown() => _Dropdown;
